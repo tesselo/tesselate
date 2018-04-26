@@ -166,7 +166,7 @@ class Tesselo(object):
         # Write data to target.
         for band_idx in range(3):
             target.bands[band_idx].data(
-                rst.bands[band_idx].data().astype(RASTER_DATATYPE),
+                rst.bands[band_idx].data().astype('uint8'),#RASTER_DATATYPE),
                 size=(WEB_MERCATOR_TILESIZE, WEB_MERCATOR_TILESIZE),
                 offset=(xoffset, yoffset),
             )
@@ -210,7 +210,7 @@ class Tesselo(object):
                 {'data': [0], 'size': (1, 1), 'nodata_value': 0},
                 {'data': [0], 'size': (1, 1), 'nodata_value': 0},
             ]
-            dtype = RASTER_DATATYPE_GDAL#1
+            dtype = 1
         else:
             bands = [{'data': [0], 'size': (1, 1), 'nodata_value': 0}]
             dtype = RASTER_DATATYPE_GDAL
@@ -226,7 +226,7 @@ class Tesselo(object):
             'scale': (scale, -scale),
             'bands': bands,
             'papsz_options': {
-                'compress': 'deflate',
+                'compress': 'packbits',
             }
         })
 
