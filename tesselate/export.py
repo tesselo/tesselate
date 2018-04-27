@@ -60,7 +60,7 @@ def _process_algebra(client, tilez, tilex, tiley, index_range, formula, composit
     data = tiles.algebra(client, tilez, tilex, tiley, composite, formula)
     # Open response as GDALRaster.
     rst = GDALRaster(data)
-    # Open as GDAL raster and print to screen.
+    # Compute offset for this tile within parent raster.
     xoffset = (tilex - index_range[0]) * WEB_MERCATOR_TILESIZE
     yoffset = (tiley - index_range[1]) * WEB_MERCATOR_TILESIZE
     # Write data

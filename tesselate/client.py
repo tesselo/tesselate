@@ -72,9 +72,7 @@ class Client(object):
             endpoint += '/{}'.format(pk)
 
         if filters:
-            print(filters)
             params = urlencode(filters, safe='[]{}()=/')
-            print(params)
             endpoint += '?{}'.format(params)
 
         response = self.get(endpoint)

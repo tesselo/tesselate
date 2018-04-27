@@ -5,7 +5,7 @@ from tesselate.aggregation import aggregate as agg_funk
 from tesselate.client import Client
 from tesselate.export import export as exp_funk
 
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
 # Instanciate the client.
 client = Client()
