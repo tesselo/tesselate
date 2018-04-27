@@ -19,3 +19,10 @@ for area_id in region['aggregationareas']:
     aggregates.append(ts.aggregate(area, composite, ndvi))
 
 regional_aggregate = ts.regional_aggregate(aggregates)
+
+z_scores = ts.z_scores_grouping(regional_aggregate['mean'], regional_aggregate['std'])
+
+z_aggregates = []
+for area_id in region['aggregationareas']:
+    area = ts.area(area_id)
+    z_aggregates.append(ts.aggregate(area, composite, ndvi, z_scores))

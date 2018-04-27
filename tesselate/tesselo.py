@@ -39,5 +39,5 @@ def export(region, composite, formula, base_path='/tmp', tilez=14):
     exp_funk(client, region, composite, formula, base_path, tilez=14)
 
 
-def aggregate(area, composite, formula):
-    return agg_funk(client, area, composite, formula)
+def aggregate(area, composite, formula, grouping='continuous'):
+    return agg_funk(client, area, composite, formula, grouping)

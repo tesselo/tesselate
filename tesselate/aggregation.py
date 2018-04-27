@@ -5,7 +5,7 @@ import logging
 from tesselate.utils import layers_dict
 
 
-def aggregate(client, area, composite, formula):
+def aggregate(client, area, composite, formula, grouping='continuous'):
     """
     Request aggregation data.
     """
@@ -16,7 +16,7 @@ def aggregate(client, area, composite, formula):
         'aggregationarea': area['id'],
         'layer_names': layer_names,
         'formula': formula['formula'].replace(' ', ''),
-        'grouping': 'continuous',
+        'grouping': grouping,
         'acres': 'True',
     }
     # Create GET version of query parameters. The layer names dict needs to be
