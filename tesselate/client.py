@@ -1,5 +1,6 @@
 import logging
 import os
+from urllib.parse import urlencode
 
 import requests
 
@@ -49,7 +50,7 @@ class Client(object):
         Make a get request to api. Assumes json response. The input url can be passed
         without api root.
         """
-        logging.debug('Requesting {}'.format(url))
+        logging.debug('GET Request {}'.format(url))
 
         # Add api root if its not part of the url.
         if not url.startswith(self.api):
@@ -71,7 +72,9 @@ class Client(object):
             endpoint += '/{}'.format(pk)
 
         if filters:
-            params = '&'.join(['{}={}'.format(key, val) for key, val in filters.items()])
+            print(filters)
+            params = urlencode(filters, safe='[]{}()=/')
+            print(params)
             endpoint += '?{}'.format(params)
 
         response = self.get(endpoint)
@@ -84,3 +87,25 @@ class Client(object):
             response = response['results']
 
         return response
+
+    def post(self, url, data, json_response=True):
+        """
+        Make a get request to api. Assumes json response. The input url can be passed
+        without api root.
+        """
+        logging.debug('POST Request {}, {}'.format(url, data))
+
+        # Add api root if its not part of the url.
+        if not url.startswith(self.api):
+            url = self.api + url
+
+        # Get response.
+        response = self.session.post(url, json=data)
+
+        # Check for errors in response.
+        response.raise_for_status()
+
+        if json_response:
+            return response.json()
+        else:
+            return response.content

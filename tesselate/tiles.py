@@ -1,15 +1,11 @@
 import urllib
 
-from tesselate import const
+from tesselate.utils import layers_query_arg
 
 
 def algebra(client, tilez, tilex, tiley, composite, formula):
     # Construct layers lookup parameter.
-    layers = []
-    for key, layer in const.LOOKUP.items():
-        if key in formula['formula']:
-            layers.append('{}={}'.format(key, composite['rasterlayer_lookup'][layer]))
-    layers = ','.join(layers)
+    layers = layers_query_arg(composite, formula)
     # Encode formula.
     formula_encoded = urllib.parse.quote(formula['formula'].replace(' ', ''), safe='()/')
     # Consturct url.

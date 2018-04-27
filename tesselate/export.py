@@ -9,11 +9,11 @@ from django.contrib.gis.gdal import GDALRaster, OGRGeometry
 from tesselate import const, tiles
 
 
-def export(client, area, composite, formula, base_path='/tmp', tilez=14):
-    logging.info('Processing "{}" over "{}" for "{}"'.format(formula['name'], area['name'], composite['name']))
+def export(client, region, composite, formula, base_path='/tmp', tilez=14):
+    logging.info('Processing "{}" over "{}" for "{}"'.format(formula['name'], region['name'], composite['name']))
 
     # Convert bbox to web mercator.
-    geom = OGRGeometry.from_bbox(area['extent'])
+    geom = OGRGeometry.from_bbox(region['extent'])
     geom.srid = 4326
     geom.transform(WEB_MERCATOR_SRID)
     extent = geom.extent
