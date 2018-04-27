@@ -1,7 +1,10 @@
 import os
 import urllib
 from collections import OrderedDict
+import logging
 
+
+from tesselate.client import Client
 import requests
 from django.conf import settings
 from django.contrib.gis.gdal import DataSource, GDALRaster, OGRGeometry
@@ -30,97 +33,27 @@ LOOKUP = {
 
 class Tesselo(object):
 
-    api = 'https://tesselo.com/api/'
 
     def __init__(self, token=None):
-        # Get token from env if available.
-        if not token and 'TESSELO_ACCESS_TOKEN' in os.environ:
-            token = os.env.get('TESSELO_ACCESS_TOKEN', None)
+        self.client = Client()
 
-        if token:
-            self.token = token
-            self._initiate_session(token)
         # For the raster tilesize function.
         try:
             settings.configure()
         except:
             pass
-    def authenticate(self, username, password):
-        response = requests.post(self.api + 'token-auth/', data={'username': username, 'password': password})
-
-        response.raise_for_status()
-
-        response = response.json()
-
-        self.username = username
-        self.token = response['token']
-        self.token_expires = response['expires']
-
-        self._initiate_session(self.token)
-
-    _session = None
-
-    def _initiate_session(self, token):
-        """
-        Initiate requests session with a standard token-based authorization header.
-        """
-
-        auth_header = {'Authorization': 'Token {}'.format(token)}
-
-        self._session = requests.Session()
-        self._session.headers.update(auth_header)
-
-
-    def _get(self, url, json_response=True):
-        """
-        Make a get request to api. Assumes json response. The input url can be passed
-        without api root.
-        """
-        # Add api root if its not part of the url.
-        if not url.startswith(self.api):
-            url = self.api + url
-
-        # Get response.
-        response = self._session.get(url)
-
-        # Check for errors in response.
-        response.raise_for_status()
-
-        if json_response:
-            return response.json()
-        else:
-            return response.content
-
-    def _get_rest(self, endpoint, pk=None, **filters):
-        if pk:
-            endpoint += '/{}'.format(pk)
-
-        if filters:
-            params = '&'.join(['{}={}'.format(key, val) for key, val in filters.items()])
-            endpoint += '?{}'.format(params)
-
-        response = self._get(endpoint)
-
-        if response.get('next', None):
-            print('WARNING: Your query has {} results, only the first {} retrieved.'.format(response['count'], len(response['results'])))
-
-        # Reduce response to data list.
-        if 'results' in response:
-            response = response['results']
-
-        return response
 
     def area(self, pk=None, **filters):
-        return self._get_rest('aggregationlayer', pk=pk, **filters)
+        return self.client.get_rest('aggregationlayer', pk=pk, **filters)
 
     def composite(self, pk=None, **filters):
-        return self._get_rest('composite', pk=pk, **filters)
+        return self.client.get_rest('composite', pk=pk, **filters)
 
     def formula(self, pk=None, **filters):
-        return self._get_rest('formula', pk=pk, **filters)
+        return self.client.get_rest('formula', pk=pk, **filters)
 
     def export(self, area, composite, formula, tilez=14):
-        print('Processing "{}" over "{}" for "{}"'.format(formula['name'], area['name'], composite['name']))
+        logging.info('Processing "{}" over "{}" for "{}"'.format(formula['name'], area['name'], composite['name']))
 
         # Convert bbox to web mercator.
         geom = OGRGeometry.from_bbox(area['extent'])
@@ -155,7 +88,7 @@ class Tesselo(object):
             composite['rasterlayer_lookup']['B02.jp2'],
         )
         # Get data.
-        data = self._get(url, json_response=False)
+        data = self.client.get(url, json_response=False)
         # Open response as GDALRaster.
         with open('/tmp/bla.png', 'wb') as f:
             f.write(data)
@@ -183,7 +116,7 @@ class Tesselo(object):
         # Consturct url.
         url = 'algebra/{}/{}/{}.tif?formula={}&layers={}'.format(tilez, tilex, tiley, formula_encoded, layers)
         # Retrieve data.
-        data = self._get(url, json_response=False)
+        data = self.client.get(url, json_response=False)
         # Open response as GDALRaster.
         rst = GDALRaster(data)
         # Open as GDAL raster and print to screen.
