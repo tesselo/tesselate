@@ -23,6 +23,7 @@ def aggregate(client, area, composite, formula, grouping='continuous'):
     # contained in the url query parameters.
     get_params = copy.deepcopy(post_params)
     get_params['layer_names'] = json.dumps(layer_names)
+    get_params['grouping'] = json.dumps(grouping) if isinstance(grouping, dict) else grouping
     # Add synchronous flag to dict.
     post_params['synchronous'] = True
     # Try to get result from cache.

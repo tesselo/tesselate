@@ -35,8 +35,8 @@ def formula(pk=None, **filters):
     return client.get_rest('formula', pk=pk, **filters)
 
 
-def export(region, composite, formula, base_path='/tmp', tilez=14):
-    exp_funk(client, region, composite, formula, base_path, tilez=14)
+def export(region, composite, formula, file_path, tilez=14):
+    exp_funk(client, region, composite, formula, file_path, tilez=14)
 
 
 def aggregate(area, composite, formula, grouping='continuous'):

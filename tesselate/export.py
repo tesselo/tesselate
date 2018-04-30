@@ -9,7 +9,7 @@ from django.contrib.gis.gdal import GDALRaster, OGRGeometry
 from tesselate import const, tiles
 
 
-def export(client, region, composite, formula, base_path='/tmp', tilez=14):
+def export(client, region, composite, formula, file_path, tilez=14):
     logging.info('Processing "{}" over "{}" for "{}"'.format(formula['name'], region['name'], composite['name']))
 
     # Convert bbox to web mercator.
@@ -21,9 +21,11 @@ def export(client, region, composite, formula, base_path='/tmp', tilez=14):
     # Compute target index range.
     index_range = tile_index_range(extent, tilez)
 
+    # Check if this is an rgb raster.
+    rgb = formula['acronym'].lower() == 'rgb'
+
     # Create target raster.
-    target_name = formula['acronym'].lower()
-    target = _create_target_raster(extent, target_name, base_path, tilez)
+    target = _create_target_raster(extent, file_path, tilez, rgb)
 
     for tilex in range(index_range[0], index_range[2] + 1):
         for tiley in range(index_range[1], index_range[3] + 1):
@@ -71,15 +73,16 @@ def _process_algebra(client, tilez, tilex, tiley, index_range, formula, composit
     )
 
 
-def _create_target_raster(bbox, target_name, base_path, zoom):
+def _create_target_raster(bbox, file_path, zoom, rgb=False):
     """
     Create empty target rasters on disk for all bands. The empty rasters
     will be populated with tile data in a second step.
     """
+
     origin, width, height, scale = _get_geotransform(bbox, zoom)
 
     # Construct bands.
-    if target_name.lower() == 'rgb':
+    if rgb:
         bands = [
             {'data': [0], 'size': (1, 1), 'nodata_value': 0},
             {'data': [0], 'size': (1, 1), 'nodata_value': 0},
@@ -91,7 +94,7 @@ def _create_target_raster(bbox, target_name, base_path, zoom):
         dtype = const.RASTER_DATATYPE_GDAL
 
     return GDALRaster({
-        'name': os.path.join(base_path, '{}.tif'.format(target_name)),
+        'name': file_path,
         'driver': 'tif',
         'datatype': dtype,
         'origin': origin,
