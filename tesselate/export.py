@@ -1,5 +1,4 @@
 import logging
-import os
 import tempfile
 
 from raster.tiles.const import WEB_MERCATOR_SRID, WEB_MERCATOR_TILESIZE
