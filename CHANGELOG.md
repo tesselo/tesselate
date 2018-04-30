@@ -3,6 +3,7 @@ Tesselate Changelog
 
 0.1.1
 -----
+- Fixed requests with custom grouping parameter.
 - Fixed synchronous valuecount calculation.
 - Changed ``base_path`` to ``file_path`` on export function. Setting the full
   filepath is more flexible than a base path with automatic naming.
