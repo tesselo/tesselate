@@ -12,5 +12,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'requests>=2.18.4',
+        'Django>=2.0',
+        'django-raster>=0.6',
     ],
 )
