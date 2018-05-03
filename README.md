@@ -73,6 +73,15 @@ formula_update = {
 ts.formula(data=formula_update)
 ```
 
+### Delete data
+
+To remove entries entirely, pass the `delete` and `pk` keywords to the endpoint.
+The following will delete the formula with the primary key 23
+
+```python
+ts.formula(pk=23, delete=True)
+```
+
 ## Testing
 
 To run the test, install mock with `pip install mock` and run tests with

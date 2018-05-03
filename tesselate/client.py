@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from urllib.parse import urlencode
 
 import requests
@@ -50,8 +51,6 @@ class Client(object):
         Make a get request to api. Assumes json response. The input url can be passed
         without api root.
         """
-        logging.debug('GET Request {}'.format(url))
-
         # Add api root if its not part of the url.
         if not url.startswith(self.api):
             url = self.api + url
@@ -72,8 +71,6 @@ class Client(object):
         if not url.startswith(self.api):
             url = self.api + url
 
-        logging.debug('POST Request {}, {}'.format(url, data))
-
         # Get response.
         response = self.session.post(url, json=data)
 
@@ -87,8 +84,6 @@ class Client(object):
         if not url.startswith(self.api):
             url = self.api + url
 
-        logging.debug('PATCH Request {}, {}'.format(url, data))
-
         # Get response.
         response = self.session.patch(url, json=data)
 
@@ -96,6 +91,23 @@ class Client(object):
         response.raise_for_status()
 
         return response.json()
+
+    def delete(self, url):
+        # Add api root if its not part of the url.
+        if not url.startswith(self.api):
+            url = self.api + url
+
+        # Ask for user confirmation.
+        sys.stdout.write('Type "yes" to confirm you want to delete the object at {} -- '.format(url))
+        if input().lower() != 'yes':
+            sys.stdout.write('The answer was not "yes", aborted operation')
+            return
+
+        # Get response.
+        response = self.session.delete(url)
+
+        # Check for errors in response.
+        response.raise_for_status()
 
     def dispatch(self, endpoint, **kwargs):
         """
@@ -112,7 +124,12 @@ class Client(object):
 
         # Add pk to endpoint if provided.
         if pk:
+            # Add pk to endpoint
             endpoint += '/{}'.format(pk)
+
+            # Handle delete case.
+            if 'delete' in kwargs:
+                return self.delete(endpoint)
 
         # Get json response keyword.
         json_response = kwargs.pop('json_response', True)
