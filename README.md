@@ -1,6 +1,6 @@
 # Tesselate - Tesselo's Python SDK
 
-Copyright (c) 2018 Tesselo
+Copyright &copy; 2018 Tesselo, all rights reserved.
 
 ## Quickstart
 
