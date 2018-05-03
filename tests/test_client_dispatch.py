@@ -84,6 +84,16 @@ def mock_update_formula(session, url, json):
     return MockResponse()
 
 
+def mock_delete_formula(session, url):
+
+    class MockResponse(object):
+
+        def raise_for_status(self):
+            pass
+
+    return MockResponse()
+
+
 class TestTesselateClient(unittest.TestCase):
 
     def setUp(self):
@@ -114,3 +124,14 @@ class TestTesselateClient(unittest.TestCase):
     def test_get_formula_detail_non_json(self):
         response = self.ts.formula(pk=36, json_response=False)
         self.assertEqual(response['acronym'], 'CI')
+
+    @mock.patch('tesselate.client.requests.Session.delete', mock_delete_formula)
+    @mock.patch('builtins.input', lambda: 'yes')
+    def test_delete_formula_yes(self):
+        response = self.ts.formula(pk=36, delete=True)
+        self.assertIsNone(response)
+
+    @mock.patch('builtins.input', lambda: 'no')
+    def test_delete_formula_no(self):
+        response = self.ts.formula(pk=36, delete=True)
+        self.assertIsNone(response)
