@@ -19,7 +19,7 @@ def mock_authenticate(url, data):
     return MockAuthResponse()
 
 
-class TestTesselateClient(unittest.TestCase):
+class TestTesselateClientAuth(unittest.TestCase):
 
     def setUp(self):
         os.environ['TESSELO_ACCESS_TOKEN'] = 'tesselate test token env'

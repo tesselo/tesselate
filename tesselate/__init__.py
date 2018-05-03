@@ -1,3 +1,3 @@
-from .tesselo import Tesselate
+from .tesselate import Tesselate
 
 __all__ = ['Tesselate']
