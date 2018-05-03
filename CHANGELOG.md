@@ -3,6 +3,8 @@ Tesselate Changelog
 
 0.1.2
 -----
+- Added possibility to manage permissions on objects.
+- Added possibility to request user or group permission lists.
 - Added unittests for auth and main dispatcher.
 - Changed import method for tesselate functionality. Now use ``from tesselate import Tesselate``
   and then instantiate ``ts = Tesselate()``. The rest works the same way.

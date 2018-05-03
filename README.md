@@ -24,7 +24,7 @@ ts = Tesselate()
 ts.client.set_token('mysecrettoken')
 
 # Authenticate with your credentials (will set token internally).
-ts.authenticate('lucille_bluth', 'shawnparmegian')
+ts.client.authenticate('lucille_bluth', 'shawnparmegian')
 ```
 
 ### Retrieve data
@@ -80,6 +80,65 @@ The following will delete the formula with the primary key 23
 
 ```python
 ts.formula(pk=23, delete=True)
+```
+
+### Retrieve users and groups permissions
+
+A list of user and group permissions can be retrieved using
+
+```python
+# List user permissions on a formula.
+ts.formula(pk=23, users=True)
+# List group permissions on a formula.
+ts.formula(pk=23, groups=True)
+```
+
+### Update permissions
+
+Permissions can be managed by adding three keywords together: `action`,
+`invite`, and `invitee`.
+
+* The `action` keyword is either `invite` or `exclude` and controls what action
+  to take.
+* The `permission` keyword either `view`, `change`, or `delete` and specifies
+  what permission to set.
+* The `invitee` keyword is a user or group dictionary and is the invitee of
+  the permission to change.
+
+The following examples show a few use cases to manage permissions on a formula.
+
+```python
+# Get one user an one group.
+lucille = ts.user(search='lucille')[0]
+bluths = ts.group(search='bluth family')[0]
+
+# Get a formula.
+ndvi = ts.formula(search='NDVI')[0]
+
+# Invite lucille to change the formula.
+ts.formula(pk=ndvi['id'], action='invite', permission='change', invitee=lucille)
+
+# Invite all bluths to view the formula.
+ts.formula(pk=ndvi['id'], action='invite', permission='view', invitee=bluths)
+
+# Make sure the bluths can not delete the formula.
+ts.formula(pk=form['id'], action='exclude', permission='delete', invitee=bluths)
+
+# List the users and groups with permissions on the formula (see previous section).
+ts.formula(pk=form['id'], users=True)
+ts.formula(pk=form['id'], groups=True)
+```
+
+### Logging
+
+Tesselate uses the default python logger. Logging can be set to either `DEBUG`,
+`INFO`, `WARNING`, or `ERROR`. The first is the most verbose, and the last the
+least verbose setting. Defaults to `INFO`. The following example sets the log
+level to `DEBUG`.
+
+```python
+import logging
+logging.getLogger().setLevel(logging.DEBUG)
 ```
 
 ## Testing

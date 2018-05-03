@@ -113,6 +113,9 @@ class Client(object):
         """
         Dispatch REST requests.
         """
+        # Get json response keyword.
+        json_response = kwargs.pop('json_response', True)
+
         # Get data arg if available.
         data = kwargs.pop('data', {})
 
@@ -128,11 +131,49 @@ class Client(object):
             endpoint += '/{}'.format(pk)
 
             # Handle delete case.
-            if 'delete' in kwargs:
+            if kwargs.pop('delete', False):
                 return self.delete(endpoint)
 
-        # Get json response keyword.
-        json_response = kwargs.pop('json_response', True)
+        # Check if user or group list was requested.
+        users = kwargs.pop('users', None)
+        groups = kwargs.pop('groups', None)
+
+        if users and groups:
+            raise ValueError('Users and groups can not be retrieved simultaneously.')
+
+        if users:
+            endpoint += '/users'
+        elif groups:
+            endpoint += '/groups'
+
+        # Check if this an permissions management call.
+        permission = kwargs.pop('permission', None)
+        action = kwargs.pop('action', None)
+        invitee = kwargs.pop('invitee', None)
+
+        if permission and action and invitee:
+            if action not in ('invite', 'exclude'):
+                raise ValueError('Permission action needs to be either "invite" or "exclude".')
+            if permission not in ('view', 'change', 'delete'):
+                raise ValueError('Permission needs to be either "view", "change" or "delete."')
+
+            # Construct update url.
+            if 'username' in invitee:
+                model = 'user'
+            else:
+                model = 'group'
+
+            permissions_url = '/{action}/{model}/{permission}/{invitee}'.format(
+                action=action,
+                model=model,
+                permission=permission,
+                invitee=invitee['id'],
+            )
+            endpoint += permissions_url
+
+            # Set json response to false, the invite endpoint returns an empty
+            # response.
+            json_response = False
 
         # Convert remaining kwargs to url parameters.
         if kwargs:
@@ -149,7 +190,7 @@ class Client(object):
             response = self.get(endpoint, json_response=json_response)
 
         if json_response:
-            if response.get('next', None):
+            if isinstance(response, dict) and response.get('next', None):
                 logging.warning('Your query has {} results, only the first {} retrieved.'.format(response['count'], len(response['results'])))
 
             # Reduce response to data list.

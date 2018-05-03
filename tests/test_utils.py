@@ -16,7 +16,6 @@ class TestTesselateUtils(unittest.TestCase):
             'formula': 'B7 / B5',
         }
 
-
     def test_layers_dict(self):
         expected = {
             'B5': 1,
