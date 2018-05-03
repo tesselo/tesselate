@@ -5,7 +5,7 @@ Tesselate Changelog
 -----
 - Added unittests for auth and main dispatcher.
 - Changed import method for tesselate functionality. Now use ``from tesselate import Tesselate``
-  and then instanciate ``ts = Tesselate()``. The rest works the same way.
+  and then instantiate ``ts = Tesselate()``. The rest works the same way.
 - Added experimental functionality for classify endpoints.
 
 0.1.1

@@ -18,7 +18,7 @@ class Tesselate(object):
         except:
             pass
 
-        # Instanciate the client.
+        # instantiate the client.
         self.client = Client()
 
     def region(self, pk=None, **filters):
