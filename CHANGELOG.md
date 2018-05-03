@@ -7,6 +7,7 @@ Tesselate Changelog
 - Changed import method for tesselate functionality. Now use ``from tesselate import Tesselate``
   and then instantiate ``ts = Tesselate()``. The rest works the same way.
 - Added experimental functionality for classify endpoints.
+- Added create and update functionality to rest endpoints.
 
 0.1.1
 -----
