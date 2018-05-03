@@ -21,6 +21,12 @@ class Tesselate(object):
         # instantiate the client.
         self.client = Client()
 
+    def user(self, pk=None, **filters):
+        return self.client.dispatch('user', pk=pk, **filters)
+
+    def group(self, pk=None, **filters):
+        return self.client.dispatch('group', pk=pk, **filters)
+
     def region(self, pk=None, **filters):
         return self.client.dispatch('aggregationlayer', pk=pk, **filters)
 
