@@ -29,7 +29,7 @@ def aggregate(client, area, composite, formula, grouping='continuous'):
     # Add synchronous flag to dict.
     post_params['synchronous'] = True
     # Try to get result from cache.
-    result = client.get_rest('valuecountresult', **get_params)
+    result = client.dispatch('valuecountresult', **get_params)
     if len(result):
         return result[0]
     else:

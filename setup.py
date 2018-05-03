@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='tesselate',
-    version='0.1.1',
+    version='0.1.2',
     url='https://github.com/tesselo/tesselate',
     author='Daniel Wiesmann',
     author_email='daniel@tesselo.com',
