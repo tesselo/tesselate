@@ -31,7 +31,6 @@ def export(client, region, composite, formula, file_path, tilez=14):
 
             if formula['acronym'] == 'RGB':
                 _process_rgb(client, tilez, tilex, tiley, index_range, formula, composite, target)
-
             else:
                 _process_algebra(client, tilez, tilex, tiley, index_range, formula, composite, target)
 
