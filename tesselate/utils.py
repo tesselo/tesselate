@@ -1,4 +1,16 @@
+import sys
+
 from tesselate import const
+
+
+def confirm(message):
+    # Ask for user confirmation.
+    sys.stdout.write('Type "yes" to confirm you want to {} -- '.format(message))
+    if input().lower() != 'yes':
+        sys.stdout.write('The answer was not "yes", aborted operation')
+        return False
+    else:
+        return True
 
 
 def layers_dict(composite, formula):

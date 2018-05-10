@@ -1,9 +1,10 @@
 import logging
 import os
-import sys
 from urllib.parse import urlencode
 
 import requests
+
+from tesselate.utils import confirm
 
 
 class Client(object):
@@ -98,9 +99,7 @@ class Client(object):
             url = self.api + url
 
         # Ask for user confirmation.
-        sys.stdout.write('Type "yes" to confirm you want to delete the object at {} -- '.format(url))
-        if input().lower() != 'yes':
-            sys.stdout.write('The answer was not "yes", aborted operation')
+        if not confirm('delete the object at {}'.format(url)):
             return
 
         # Get response.
