@@ -48,6 +48,9 @@ class Tesselate(object):
     def classifier(self, pk=None, **filters):
         return self.client.dispatch('classifier', pk=pk, **filters)
 
+    def predictedlayer(self, pk=None, **filters):
+        return self.client.dispatch('predictedlayer', pk=pk, **filters)
+
     def export(self, region, composite, formula, file_path, tilez=14):
         export(self.client, region, composite, formula, file_path, tilez=14)
 
