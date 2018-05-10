@@ -4,6 +4,7 @@ from django.conf import settings
 from tesselate.aggregation import aggregate, regional_aggregate
 from tesselate.client import Client
 from tesselate.export import export
+from tesselate.triggers import build, predict, train
 from tesselate.utils import z_scores_grouping
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
@@ -36,6 +37,9 @@ class Tesselate(object):
     def composite(self, pk=None, **filters):
         return self.client.dispatch('composite', pk=pk, **filters)
 
+    def compositebuild(self, pk=None, **filters):
+        return self.client.dispatch('compositebuild', pk=pk, **filters)
+
     def scene(self, pk=None, **filters):
         return self.client.dispatch('sentineltile', pk=pk, **filters)
 
@@ -56,6 +60,15 @@ class Tesselate(object):
 
     def aggregate(self, area, composite, formula, grouping='continuous'):
         return aggregate(self.client, area, composite, formula, grouping)
+
+    def build(self, compositebuild):
+        return build(self.client, compositebuild)
+
+    def train(self, classifier):
+        return train(self.client, classifier)
+
+    def predict(self, predictedlayer):
+        return predict(self.client, predictedlayer)
 
     def regional_aggregate(self, valuecounts):
         return regional_aggregate(valuecounts)
