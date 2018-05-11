@@ -2,14 +2,21 @@ from django.contrib.gis.gdal import DataSource
 from tesselate.utils import confirm
 
 
-def ingest(ts, classifier, scene, shapefile, class_column, valuemap):
+def ingest(ts, classifier, image, shapefile, class_column, valuemap):
     """
     Upload trainingsamples from a shapefile.
 
     The class_column is the shapefile attribute that contains the class of the
     training patch. The valuemap is a dict with class names as keys and class
     values as integers.
+
+    The image is either a sentineltile or a composite.
     """
+    # Decide if layer input is a scene or a composite.
+    if 'interval' in image:
+        image_key = 'composite'
+    else:
+        image_key = 'sentineltile'
     # Open data source.
     ds = DataSource(shapefile)
     # Get layer from data source.
@@ -33,7 +40,7 @@ def ingest(ts, classifier, scene, shapefile, class_column, valuemap):
             'category': category,
             'value': category_value,
             'geom': feat.geom.ewkt,
-            'sentineltile': scene['id'],
+            image_key: image['id'],
         })
 
     # Ask for confirmation before posting the data.

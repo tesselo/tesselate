@@ -52,3 +52,8 @@ class TestTesselateTriggers(unittest.TestCase):
 
         response = self.ts.ingest(classifier, scene, self.shapefile, class_column, valuemap)
         self.assertEqual(len(response['trainingsamples']), 20)
+
+        # The interval key identifies this object as composite.
+        composite = {'id': 3, 'interval': 'Monthly'}
+        response = self.ts.ingest(classifier, composite, self.shapefile, class_column, valuemap)
+        self.assertEqual(len(response['trainingsamples']), 20)
