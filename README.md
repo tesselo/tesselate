@@ -162,6 +162,40 @@ predictedlayer = ts.predictedlayer()[0]
 ts.predict(predictedlayer)
 ```
 
+## Ingest training data
+
+Training data polygons can be ingested using an utility function. The training
+data needs to be provided as a polygon shapefile layer. The function has the
+following required arguments:
+
+- *classifier*: The training data will be attached to a classifier that can use
+  the data for training.
+- *image*: The training data is assumed to be "drawn" over a scene or a composite.
+  So either a scene or a composite is required.
+- *shapefile*: An absoulte path to a shapefile.
+- *class_column*: The name of the column in the attribute table that contains
+  the training class. Either an integer or a string column.
+- *valuemap*: A dictionary with class names as keys and class
+  values as integers. If integers are found in the class_column, the dict will
+  be used to extract class names and vice versa.
+
+The function can be called as follows. A user confirmation will be requested
+before writing any data.
+
+```python
+# Get a classifier.
+classifier = ts.classifier(search='Landcover')[0]
+# Get the composite over which the training was "drawn". This could also be a
+# scene, both are accepted.
+composite = ts.composite(min_date_0='2017-04-01', min_date_1='2018-03-31')[0]
+# Set path, column name and valuemap.
+shp_path = '/path/to/shapefile.shp'
+class_column = 'high_or_low'
+valuemap = {'high': 1, 'low': 2}
+# Upload training samples.
+response = self.ts.ingest(classifier, scene, shp_path, 'name', valuemap)
+```
+
 ## Logging
 
 Tesselate uses the default python logger. Logging can be set to either `DEBUG`,
