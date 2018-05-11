@@ -67,7 +67,7 @@ class Client(object):
         else:
             return response.content
 
-    def post(self, url, data):
+    def post(self, url, data={}):
         # Add api root if its not part of the url.
         if not url.startswith(self.api):
             url = self.api + url
