@@ -4,6 +4,7 @@ from django.conf import settings
 from tesselate.aggregation import aggregate, regional_aggregate
 from tesselate.client import Client
 from tesselate.export import export
+from tesselate.training import ingest
 from tesselate.triggers import build, predict, train
 from tesselate.utils import z_scores_grouping
 
@@ -75,3 +76,6 @@ class Tesselate(object):
 
     def z_scores_grouping(self, mean, std):
         return z_scores_grouping(mean, std)
+
+    def ingest(self, classifier, scene, shapefile, class_column, valuemap):
+        return ingest(self, classifier, scene, shapefile, class_column, valuemap)
