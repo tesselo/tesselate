@@ -2,7 +2,7 @@
 
 Copyright &copy; 2018 Tesselo, all rights reserved.
 
-## Quickstart
+## Docs
 
 ### Instantiate Tesselate and authenticate
 
@@ -129,7 +129,40 @@ ts.formula(pk=form['id'], users=True)
 ts.formula(pk=form['id'], groups=True)
 ```
 
-### Logging
+### Schedule tasks
+
+Several long running tasks can be scheduled with function calls. The available
+triggers are listed below. All trigger functions prompt the user for
+confirmation.
+
+#### Build a Composite
+
+```python
+# Get a composite.
+composite = ts.composite(min_date_0='2017-04-01', min_date_1='2018-03-31', interval='Monthly')[0]
+# Trigger the build for the composite.
+ts.build(composite)
+```
+
+#### Train a Classifier
+
+```python
+# Get a classifier.
+classifier = ts.classifier(search='Landcover')[0]
+# Trigger training of the classifier.
+ts.train(classifier)
+```
+
+#### Predict a layer
+
+```python
+# Get a predicted layer (contains info about area and classifier to use).
+predictedlayer = ts.predictedlayer()[0]
+# Trigger prediction of the layer.
+ts.predict(predictedlayer)
+```
+
+## Logging
 
 Tesselate uses the default python logger. Logging can be set to either `DEBUG`,
 `INFO`, `WARNING`, or `ERROR`. The first is the most verbose, and the last the
