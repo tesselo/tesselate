@@ -1,6 +1,8 @@
 import unittest
 
-from tesselate.utils import layers_dict, layers_query_arg, z_scores_grouping
+import mock
+
+from tesselate.utils import confirm, layers_dict, layers_query_arg, z_scores_grouping
 
 
 class TestTesselateUtils(unittest.TestCase):
@@ -41,3 +43,13 @@ class TestTesselateUtils(unittest.TestCase):
                 {'expression': 'x>4.9', 'name': 'Very High', 'color': '#1a9641'}
             ],
         )
+
+    @mock.patch('sys.stdout.write', lambda x: None)
+    @mock.patch('builtins.input', lambda: 'yes')
+    def test_confirm_yes(self):
+        self.assertTrue(confirm(''))
+
+    @mock.patch('sys.stdout.write', lambda x: None)
+    @mock.patch('builtins.input', lambda: 'no')
+    def test_confirm_no(self):
+        self.assertFalse(confirm(''))

@@ -3,18 +3,17 @@ import os
 import unittest
 
 import mock
+from tests.utils import TesselateMockResponseBase
 
 from tesselate import Tesselate
 
+# Reduce log level during tests.
 logging.getLogger().setLevel(logging.ERROR)
 
 
 def mock_get_formula_list(session, url):
 
-    class MockResponse(object):
-
-        def raise_for_status(self):
-            pass
+    class MockResponse(TesselateMockResponseBase):
 
         def json(self):
             return {
@@ -40,27 +39,17 @@ def mock_get_formula_list(session, url):
 
 def mock_get_formula_detail(session, url):
 
-    class MockResponse(object):
-
-        def raise_for_status(self):
-            pass
+    class MockResponse(TesselateMockResponseBase):
 
         def json(self):
             return {'id': 36, 'name': 'Chlorophyll Index', 'acronym': 'CI', 'description': 'Chlorophyll Index', 'formula': 'B7 / B5', 'min_val': 6.0, 'max_val': 0.0, 'breaks': 5, 'color_palette': 'RdYlGn'}
-
-        @property
-        def content(self):
-            return self.json()
 
     return MockResponse()
 
 
 def mock_create_formula(session, url, json):
 
-    class MockResponse(object):
-
-        def raise_for_status(self):
-            pass
+    class MockResponse(TesselateMockResponseBase):
 
         def json(self):
             json.update({'id': 1})
@@ -71,10 +60,7 @@ def mock_create_formula(session, url, json):
 
 def mock_update_formula(session, url, json):
 
-    class MockResponse(object):
-
-        def raise_for_status(self):
-            pass
+    class MockResponse(TesselateMockResponseBase):
 
         def json(self):
             orig = {'id': 36, 'name': 'Chlorophyll Index', 'acronym': 'CI', 'description': 'Chlorophyll Index', 'formula': 'B7 / B5', 'min_val': 6.0, 'max_val': 0.0, 'breaks': 5, 'color_palette': 'RdYlGn'}
@@ -86,12 +72,7 @@ def mock_update_formula(session, url, json):
 
 def mock_delete_formula(session, url):
 
-    class MockResponse(object):
-
-        def raise_for_status(self):
-            pass
-
-    return MockResponse()
+    return TesselateMockResponseBase()
 
 
 class TestTesselateClient(unittest.TestCase):
@@ -125,12 +106,14 @@ class TestTesselateClient(unittest.TestCase):
         response = self.ts.formula(pk=36, json_response=False)
         self.assertEqual(response['acronym'], 'CI')
 
+    @mock.patch('sys.stdout.write', lambda x: None)
     @mock.patch('tesselate.client.requests.Session.delete', mock_delete_formula)
     @mock.patch('builtins.input', lambda: 'yes')
     def test_delete_formula_yes(self):
         response = self.ts.formula(pk=36, delete=True)
         self.assertIsNone(response)
 
+    @mock.patch('sys.stdout.write', lambda x: None)
     @mock.patch('builtins.input', lambda: 'no')
     def test_delete_formula_no(self):
         response = self.ts.formula(pk=36, delete=True)
