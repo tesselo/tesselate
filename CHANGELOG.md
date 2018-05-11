@@ -1,5 +1,17 @@
-Tesselate Changelog
-===================
+Tesselate Release Notes
+=======================
+
+0.2.0
+-----
+First full stack implementation. Tesselate can now be used to create composites,
+upload training data, train an algorithm, predict a layer and export the result.
+I.e. the full workflow from zero to predicted layer is now covered!
+
+In detail, the following changes:
+- Added predicted layer endpoint.
+- Added trigger functions for long running tasks: build composite, train
+  classifier, predict layer.
+- Created shapefile ingestor to upload trainig data.
 
 0.1.2
 -----
