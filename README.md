@@ -33,7 +33,7 @@ Get a list of composites or scenes as JSON dictionaries as follows
 
 ```python
 # List monthly composites between two dates.
-ts.composite(min_date_0='2017-04-01', min_date_1='2018-03-31', interval='Monthly')
+ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31', interval='Monthly')
 # List scenes for a location between two dates.
 ts.scene(coords='3991669.5,1278364.1', collected_after='2017-11-30', collected_before='2018-12-02')
 ```
@@ -138,10 +138,21 @@ confirmation.
 #### Build a Composite
 
 ```python
-# Get a composite.
-composite = ts.composite(min_date_0='2017-04-01', min_date_1='2018-03-31', interval='Monthly')[0]
-# Trigger the build for the composite.
-ts.build(composite)
+# Create a new composite build object.
+composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31', interval='Monthly')[0]
+
+region = ts.region(search='Orange County')
+
+lucille = ts.user(search='Lucille')[0]
+
+compositebuild = ts.compositebuild(data={
+  composite: composite['id'],
+  aggregationlayer: region['id'],
+  owner: lucille['id'],
+})
+
+# Trigger the composite build.
+ts.build(compositebuild)
 ```
 
 #### Train a Classifier
@@ -187,7 +198,7 @@ before writing any data.
 classifier = ts.classifier(search='Landcover')[0]
 # Get the composite over which the training was "drawn". This could also be a
 # scene, both are accepted.
-composite = ts.composite(min_date_0='2017-04-01', min_date_1='2018-03-31')[0]
+composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31')[0]
 # Set path, column name and valuemap.
 shp_path = '/path/to/shapefile.shp'
 class_column = 'high_or_low'
