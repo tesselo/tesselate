@@ -1,8 +1,17 @@
 from setuptools import find_packages, setup
 
+
+def get_version():
+    with open('tesselate/__init__.py', 'r') as init:
+        for line in init.readlines():
+            if line.startswith('__version__'):
+                version = line.split(' = ')[1].rstrip()
+                return version.split("'")[1]
+
+
 setup(
     name='tesselate',
-    version='0.2.1',
+    version=get_version(),
     url='https://github.com/tesselo/tesselate',
     author='Daniel Wiesmann',
     author_email='daniel@tesselo.com',
