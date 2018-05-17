@@ -1,6 +1,10 @@
 Tesselate Release Notes
 =======================
 
+0.2.1
+-----
+Fixed bug in compositebuild trigger.
+
 0.2.0
 -----
 First full stack implementation. Tesselate can now be used to create composites,

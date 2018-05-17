@@ -32,4 +32,4 @@ def build(client, compositebuild):
     if not confirm('build the CopositeBuild with pk {}'.format(compositebuild['id'])):
         return
 
-    return client.post('predictedlayer/{}/predict'.format(compositebuild['id']))
+    return client.post('compositebuild/{}/build'.format(compositebuild['id']))
