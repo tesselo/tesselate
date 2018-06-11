@@ -2,9 +2,7 @@
 
 Copyright &copy; 2018 Tesselo, all rights reserved.
 
-## Docs
-
-### Instantiate Tesselate and authenticate
+## Instantiate Tesselate and authenticate
 
 Tesselate will authenticate using the auth token from the environment if the
 `TESSELO_ACCESS_TOKEN` environment variable is set when instantiating
@@ -27,7 +25,7 @@ ts.client.set_token('mysecrettoken')
 ts.client.authenticate('lucille_bluth', 'shawnparmegian')
 ```
 
-### Retrieve data
+## Retrieve data
 
 Get a list of composites or scenes as JSON dictionaries as follows
 
@@ -38,7 +36,7 @@ ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31', interval='Monthly
 ts.scene(coords='3991669.5,1278364.1', collected_after='2017-11-30', collected_before='2018-12-02')
 ```
 
-### Write data
+## Write data
 
 To create new objects, call the endpoint with a dictionary containging the data
 for the new object in the `data` keyword. For example, create a new formula as
@@ -73,7 +71,7 @@ formula_update = {
 ts.formula(data=formula_update)
 ```
 
-### Delete data
+## Delete data
 
 To remove entries entirely, pass the `delete` and `pk` keywords to the endpoint.
 The following will delete the formula with the primary key 23
@@ -82,7 +80,7 @@ The following will delete the formula with the primary key 23
 ts.formula(pk=23, delete=True)
 ```
 
-### Retrieve users and groups permissions
+## Retrieve users and groups permissions
 
 A list of user and group permissions can be retrieved using
 
@@ -93,7 +91,7 @@ ts.formula(pk=23, users=True)
 ts.formula(pk=23, groups=True)
 ```
 
-### Update permissions
+## Update permissions
 
 Permissions can be managed by adding three keywords together: `action`,
 `invite`, and `invitee`.
@@ -129,13 +127,13 @@ ts.formula(pk=form['id'], users=True)
 ts.formula(pk=form['id'], groups=True)
 ```
 
-### Schedule tasks
+## Schedule tasks
 
 Several long running tasks can be scheduled with function calls. The available
 triggers are listed below. All trigger functions prompt the user for
 confirmation.
 
-#### Build a Composite
+### Build a Composite
 
 ```python
 # Create a new composite build object.
@@ -155,7 +153,7 @@ compositebuild = ts.compositebuild(data={
 ts.build(compositebuild)
 ```
 
-#### Train a Classifier
+### Train a Classifier
 
 ```python
 # Get a classifier.
@@ -164,7 +162,7 @@ classifier = ts.classifier(search='Landcover')[0]
 ts.train(classifier)
 ```
 
-#### Predict a layer
+### Predict a layer
 
 ```python
 # Get a predicted layer (contains info about area and classifier to use).
