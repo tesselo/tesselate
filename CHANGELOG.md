@@ -1,6 +1,11 @@
 Tesselate Release Notes
 =======================
 
+0.2.2
+-----
+- Fixed zoomlevel bug on export, zoomlevel specification was not working.
+- Fixed export of areas that contain empty tiles.
+
 0.2.1
 -----
 Fixed bug in compositebuild trigger.
