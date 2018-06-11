@@ -232,6 +232,75 @@ zoom = 8
 ts.export(region, composite, formula, target, zoom)
 ```
 
+## Aggregation
+The aggregation api can be called by passing a composite or scene, a formula and
+an aggregation area to the aggregation function.
+
+Note that if the aggregation values have not been already precomputed, the
+computation is requested asynchronously. In that case, the aggregation has to
+be requested a second time a few seconds after the initial request.
+
+The following creates a list of aggregation values with one entry for each
+aggregation area in a region.
+
+```python
+formula = ts.formula(search='NDVI')[0]
+# Get a scene or a composite for export.
+composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31')[0]
+# Get region over which to export.
+region = ts.region(search='Ethiopia')[0]
+# Loop through aggregation areas in region.
+aggregates = []
+for area_id in region['aggregationareas']:
+    # Get aggregation area.
+    area = ts.area(area_id)
+    # Compute aggregate (triggers async computation if not precomputed).
+    agg = ts.aggregate(area, composite, ndvi)
+    aggregates.append(agg)
+```
+
+### Regional aggregates
+In some cases, comparing aggregates over regions might be desireable. Tesselate
+allows computing regional aggregates. The value count result endpoint returns
+the necessary internal statistics to compute "averages over averages" in a
+mathematically exact way.
+
+To get the regional statistics over a list of valuecount results (as obtained in
+the example above), use the regional aggregate function as follows
+
+```python
+# The regional aggregate function takes a list of value count results and
+# returns the regional statistics.
+>>> regional_aggregate = ts.regional_aggregate(aggregates)
+>>> print(regional_aggregate)
+{
+  "min": 0.599244875943905,
+  "std": 0.017285077465624056,
+  "mean": 0.8746274871261831,
+  "max": 0.926344086021505
+}
+```
+
+### Z-Scores based on regional aggregates
+The regional aggregates can be used to create grouping parameters that compute
+z-score values based on the average and standard deviation of the regional
+aggregates.
+
+Tesselate has a function to create the grouping parameter needed to request
+z-scores through the aggregation endpoint. The following example uses the data
+from the snippets above to request regional z-score value counts.
+
+```python
+# Get grouping parameter.
+z_scores = ts.z_scores_grouping(regional_aggregate['mean'], regional_aggregate['std'])
+
+# Re-compute aggregates using the z-score breaks.
+z_aggregates = []
+for area_id in region['aggregationareas']:
+    area = ts.area(area_id)
+    z_aggregates.append(ts.aggregate(area, composite, ndvi, z_scores))
+```
+
 ## Logging
 
 Tesselate uses the default python logger. Logging can be set to either `DEBUG`,
