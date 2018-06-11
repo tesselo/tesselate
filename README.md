@@ -2,7 +2,7 @@
 
 Copyright &copy; 2018 Tesselo, all rights reserved.
 
-Tesselate is a wrapper to use Tesselo's API in a human friendly interaction.
+Tesselate is a wrapper for human friendly interaction with Tesselo's API.
 
 The endpoints are represented by functions that all have similar base
 functionality. Data can be read, written and updated in a standardized way.
@@ -13,6 +13,59 @@ confirmation.
 
 Layers can be aggregated through the api or exported to local files for further
 analysis.
+
+## General usage of api endpoints
+
+This section describes the current general functionality of the api wrapper.
+Each api endpoint is represented by one function.
+
+Generally, the endpoint functions simply pass on the input keyword arguments as
+query arguments. To consult what query arguments are allowed, visit the
+browseable api and look at the filter section.
+
+A few exceptions to the general rule are:
+
+- `pk` This keyword is interpreted as the ID or primary key of the objects. It
+  should be used to get individual objects and to create or update them.
+- `data` This keyword is a dictionary with data for the endpoint. If a `pk`
+  argument is provided or if the `data` dictionary contains an `id` key, the
+  data is used to update the corresponding object. Otherwise a new one is
+  created.
+- `search` Some endpoints allow filtering by loose text search with this keyword.
+- `permission` This will trigger permissions changes. See section below for
+  details.
+
+### List of supported endpoints
+
+  | Function        | Endpoint | Description |
+  | --------------- | -------- | ----------- |
+  | group | [/api/groups](https://tesselo.com/api/group) | Lists of groups, read-only |
+  | user | [/api/groups](https://tesselo.com/api/user) | List of users, read-only |
+  | region | [/api/aggregationlayer](https://tesselo.com/api/aggregationlayer) | Aggregationlayers serve as regions |
+  | area | [/api/aggregationarea](https://tesselo.com/api/aggregationarea) | Individual aggregation areas |
+  | composite | [/api/composite](https://tesselo.com/api/composite)| Composite layers |
+  | compositebuild | [/api/compositebuild](https://tesselo.com/api/compositebuild)| Composite build objects to track builds |
+  | scene | [/api/sentineltile](https://tesselo.com/api/sentineltile)| Individual sentinel scenes |
+  | formula | [/api/formula](https://tesselo.com/api/formula)| Formulas for algebra rendering and aggregation |
+  | trainingsample | [/api/trainingsample](https://tesselo.com/api/trainingsample)| Training sample polygon |
+  | classifier | [/api/classifier](https://tesselo.com/api/classifier)| Classifier to train against trainingsamples |
+  | predictedlayer | [/api/predictedlayer](https://tesselo.com/api/predictedlayer)| A layer to predict on with classifier |
+
+### List of addtional functions
+
+The following is a list of action endpoints, in additon to the data model api
+endpoints. These functions are described in more detail below.
+
+| Function | Purpose |
+| -------- | ------- |
+| export | Export algebra expressions or RGB to local files |
+| aggregate | Call aggregation endpoint |
+| build | Build a composite |
+| train | Train a classifier |
+| predict | Predict over a scene or composite using a classifier |
+| regional_aggregate | Compute regional aggregates |
+| z_scores_grouping | Helper to create z-scores breaks valuecount dictionary |
+| ingest | Ingest a shapefile as training data |
 
 ## Instantiate Tesselate and authenticate
 
@@ -199,7 +252,7 @@ shp_path = '/path/to/shapefile.shp'
 class_column = 'high_or_low'
 valuemap = {'high': 1, 'low': 2}
 # Upload training samples.
-response = self.ts.ingest(classifier, scene, shp_path, 'name', valuemap)
+response = ts.ingest(classifier, scene, shp_path, 'name', valuemap)
 ```
 
 ### Train a Classifier
@@ -313,22 +366,6 @@ for area_id in region['aggregationareas']:
     area = ts.area(area_id)
     z_aggregates.append(ts.aggregate(area, composite, ndvi, z_scores))
 ```
-
-## List of supported endpoints
-
-| Function        | Endpoint | Description |
-| --------------- | -------- | ----------- |
-| group | [/api/groups](https://tesselo.com/api/group) | Lists of groups, read-only |
-| user | [/api/groups](https://tesselo.com/api/user) | List of users, read-only |
-| region | [/api/aggregationlayer](https://tesselo.com/api/aggregationlayer) | Aggregationlayers serve as regions |
-| area | [/api/aggregationarea](https://tesselo.com/api/aggregationarea) | Individual aggregation areas |
-| composite | [/api/composite](https://tesselo.com/api/composite)| Composite layers |
-| compositebuild | [/api/compositebuild](https://tesselo.com/api/compositebuild)| Composite build objects to track builds |
-| scene | [/api/sentineltile](https://tesselo.com/api/sentineltile)| Individual sentinel scenes |
-| formula | [/api/formula](https://tesselo.com/api/formula)| Formulas for algebra rendering and aggregation |
-| trainingsample | [/api/trainingsample](https://tesselo.com/api/trainingsample)| Training sample polygon |
-| classifier | [/api/classifier](https://tesselo.com/api/classifier)| Classifier to train against trainingsamples |
-| predictedlayer | [/api/predictedlayer](https://tesselo.com/api/predictedlayer)| A layer to predict on with classifier |
 
 ## Logging
 
