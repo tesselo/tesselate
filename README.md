@@ -207,6 +207,27 @@ valuemap = {'high': 1, 'low': 2}
 response = self.ts.ingest(classifier, scene, shp_path, 'name', valuemap)
 ```
 
+## Export data
+A layer can be exported in one line. The input is a composite or a scene and a
+formula to evaluate against the data layer. A region also needs to be specified
+to define over which area to export, and a path to a file that will be newly
+created or overwritten by the export function.
+
+The following example exports NDVI of a march composite over Ethiopia.
+
+```python
+# Get a formula.
+formula = ts.formula(search='NDVI')[0]
+# Get a scene or a composite for export.
+composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31')[0]
+# Get region over which to export.
+region = ts.region(search='Ethiopia')[0]
+# Specify the local path for the target file.
+target = '/path/to/newfile.tif'
+# Export the data of the formula result evaluated on the composite over the region.
+ts.export(region, composite, formula, target)
+```
+
 ## Logging
 
 Tesselate uses the default python logger. Logging can be set to either `DEBUG`,
