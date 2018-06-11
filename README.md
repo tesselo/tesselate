@@ -314,6 +314,22 @@ for area_id in region['aggregationareas']:
     z_aggregates.append(ts.aggregate(area, composite, ndvi, z_scores))
 ```
 
+## List of supported endpoints
+
+| Function        | Endpoint | Description |
+| --------------- | -------- | ----------- |
+| group | [/api/groups](https://tesselo.com/api/group) | Lists of groups, read-only |
+| user | [/api/groups](https://tesselo.com/api/user) | List of users, read-only |
+| region | [/api/aggregationlayer](https://tesselo.com/api/aggregationlayer) | Aggregationlayers serve as regions |
+| area | [/api/aggregationarea](https://tesselo.com/api/aggregationarea) | Individual aggregation areas |
+| composite | [/api/composite](https://tesselo.com/api/composite)| Composite layers |
+| compositebuild | [/api/compositebuild](https://tesselo.com/api/compositebuild)| Composite build objects to track builds |
+| scene | [/api/sentineltile](https://tesselo.com/api/sentineltile)| Individual sentinel scenes |
+| formula | [/api/formula](https://tesselo.com/api/formula)| Formulas for algebra rendering and aggregation |
+| trainingsample | [/api/trainingsample](https://tesselo.com/api/trainingsample)| Training sample polygon |
+| classifier | [/api/classifier](https://tesselo.com/api/classifier)| Classifier to train against trainingsamples |
+| predictedlayer | [/api/predictedlayer](https://tesselo.com/api/predictedlayer)| A layer to predict on with classifier |
+
 ## Logging
 
 Tesselate uses the default python logger. Logging can be set to either `DEBUG`,
