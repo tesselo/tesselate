@@ -1,7 +1,7 @@
 import logging
 import tempfile
 
-from django.contrib.gis.gdal import GDALRaster, OGRGeometry
+from django.contrib.gis.gdal import GDALException, GDALRaster, OGRGeometry
 from raster.tiles.const import WEB_MERCATOR_SRID, WEB_MERCATOR_TILESIZE
 from raster.tiles.utils import tile_bounds, tile_index_range, tile_scale
 
@@ -9,7 +9,12 @@ from tesselate import const, tiles
 
 
 def export(client, region, composite, formula, file_path, tilez=14):
-    logging.info('Processing "{}" over "{}" for "{}"'.format(formula['name'], region['name'], composite['name']))
+    logging.info('Processing "{}" over "{}" for "{}" at zoom "{}"'.format(
+        formula['name'],
+        region['name'],
+        composite['name'],
+        tilez,
+    ))
 
     # Convert bbox to web mercator.
     geom = OGRGeometry.from_bbox(region['extent'])
@@ -27,15 +32,16 @@ def export(client, region, composite, formula, file_path, tilez=14):
     target = _create_target_raster(extent, file_path, tilez, rgb)
 
     # Compute nr of tiles to process.
-    tile_count = (index_range[2] - index_range[0] + 1) * (index_range[3], index_range[1] + 1)
+    tile_count = (index_range[2] - index_range[0] + 1) * (index_range[3] - index_range[1] + 1)
     counter = 0
+    logging.info('Found {} tiles to process for export.'.format(tile_count))
 
     # Get and write tiles.
     for tilex in range(index_range[0], index_range[2] + 1):
         for tiley in range(index_range[1], index_range[3] + 1):
             # Log progress.
             if counter % 100 == 0:
-                logging.debug('Processed {}/{} tiles.'.format(counter, tile_count))
+                logging.info('Processed {}/{} tiles.'.format(counter, tile_count))
             counter += 1
 
             if formula['acronym'] == 'RGB':
@@ -54,7 +60,10 @@ def _process_rgb(client, tilez, tilex, tiley, index_range, formula, composite, t
     # buffer itself is not readable by GDALRaster.
     with tempfile.NamedTemporaryFile() as tmp:
         tmp.write(data)
-        rst = GDALRaster(tmp.name)
+        try:
+            rst = GDALRaster(tmp.name)
+        except GDALException:
+            return
         # Write data to target.
         for band_idx in range(3):
             target.bands[band_idx].data(
@@ -87,6 +96,7 @@ def _create_target_raster(bbox, file_path, zoom, rgb=False):
     """
 
     origin, width, height, scale = _get_geotransform(bbox, zoom)
+    logging.debug('Target geotransform {} {} {} {}.'.format(origin, width, height, scale))
 
     # Construct bands.
     if rgb:
@@ -96,9 +106,11 @@ def _create_target_raster(bbox, file_path, zoom, rgb=False):
             {'data': [0], 'size': (1, 1), 'nodata_value': 0},
         ]
         dtype = 1
+        compress = 'deflate'
     else:
         bands = [{'data': [0], 'size': (1, 1), 'nodata_value': 0}]
         dtype = const.RASTER_DATATYPE_GDAL
+        compress = 'deflate'
 
     return GDALRaster({
         'name': file_path,
@@ -111,7 +123,7 @@ def _create_target_raster(bbox, file_path, zoom, rgb=False):
         'scale': (scale, -scale),
         'bands': bands,
         'papsz_options': {
-            'compress': 'deflate',
+            'compress': compress,
         }
     })
 
