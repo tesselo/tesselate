@@ -3,9 +3,9 @@ import tempfile
 
 from raster.tiles.const import WEB_MERCATOR_SRID, WEB_MERCATOR_TILESIZE
 from raster.tiles.utils import tile_bounds, tile_index_range, tile_scale
+from tesselate import const, tiles
 
 from django.contrib.gis.gdal import GDALRaster, OGRGeometry
-from tesselate import const, tiles
 
 
 def export(client, region, composite, formula, file_path, tilez=14):
@@ -26,8 +26,17 @@ def export(client, region, composite, formula, file_path, tilez=14):
     # Create target raster.
     target = _create_target_raster(extent, file_path, tilez, rgb)
 
+    # Compute nr of tiles to process.
+    tile_count = (index_range[2] - index_range[0] + 1) * (index_range[3], index_range[1] + 1)
+    counter = 0
+
+    # Get and write tiles.
     for tilex in range(index_range[0], index_range[2] + 1):
         for tiley in range(index_range[1], index_range[3] + 1):
+            # Log progress.
+            if counter % 100 == 0:
+                logging.debug('Processed {}/{} tiles.'.format(counter, tile_count))
+            counter += 1
 
             if formula['acronym'] == 'RGB':
                 _process_rgb(client, tilez, tilex, tiley, index_range, formula, composite, target)

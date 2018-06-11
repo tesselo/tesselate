@@ -211,7 +211,9 @@ response = self.ts.ingest(classifier, scene, shp_path, 'name', valuemap)
 A layer can be exported in one line. The input is a composite or a scene and a
 formula to evaluate against the data layer. A region also needs to be specified
 to define over which area to export, and a path to a file that will be newly
-created or overwritten by the export function.
+created or overwritten by the export function. The zoom level at which to run
+the export can be specified with the optional `tilez` argument. The default zoom
+level is `14`.
 
 The following example exports NDVI of a march composite over Ethiopia.
 
@@ -224,8 +226,10 @@ composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31')[0]
 region = ts.region(search='Ethiopia')[0]
 # Specify the local path for the target file.
 target = '/path/to/newfile.tif'
+# Specify the export zoom level (default is 14).
+zoom = 8
 # Export the data of the formula result evaluated on the composite over the region.
-ts.export(region, composite, formula, target)
+ts.export(region, composite, formula, target, zoom)
 ```
 
 ## Logging
