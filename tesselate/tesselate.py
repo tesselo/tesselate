@@ -58,7 +58,7 @@ class Tesselate(object):
         return self.client.dispatch('predictedlayer', pk=pk, **filters)
 
     def export(self, region, composite, formula, file_path, tilez=14):
-        export(self.client, region, composite, formula, file_path, tilez=14)
+        export(self.client, region, composite, formula, file_path, tilez=tilez)
 
     def aggregate(self, area, composite, formula, grouping='continuous'):
         return aggregate(self.client, area, composite, formula, grouping)
