@@ -1,11 +1,11 @@
 import logging
 import tempfile
 
+from django.contrib.gis.gdal import GDALRaster, OGRGeometry
 from raster.tiles.const import WEB_MERCATOR_SRID, WEB_MERCATOR_TILESIZE
 from raster.tiles.utils import tile_bounds, tile_index_range, tile_scale
-from tesselate import const, tiles
 
-from django.contrib.gis.gdal import GDALRaster, OGRGeometry
+from tesselate import const, tiles
 
 
 def export(client, region, composite, formula, file_path, tilez=14):

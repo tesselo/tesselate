@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+
 from tesselate.aggregation import aggregate, regional_aggregate
 from tesselate.client import Client
 from tesselate.export import export
