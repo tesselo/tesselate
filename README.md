@@ -2,6 +2,18 @@
 
 Copyright &copy; 2018 Tesselo, all rights reserved.
 
+Tesselate is a wrapper to use Tesselo's API in a human friendly interaction.
+
+The endpoints are represented by functions that all have similar base
+functionality. Data can be read, written and updated in a standardized way.
+
+Several long running tasks can be scheduled with function calls. The available
+triggers are listed below. All trigger functions prompt the user for
+confirmation.
+
+Layers can be aggregated through the api or exported to local files for further
+analysis.
+
 ## Instantiate Tesselate and authenticate
 
 Tesselate will authenticate using the auth token from the environment if the
@@ -127,13 +139,10 @@ ts.formula(pk=form['id'], users=True)
 ts.formula(pk=form['id'], groups=True)
 ```
 
-## Schedule tasks
+## Build Composites
 
-Several long running tasks can be scheduled with function calls. The available
-triggers are listed below. All trigger functions prompt the user for
-confirmation.
-
-### Build a Composite
+To build a compoiste, create a compositebuild object and trigger the build by
+passing the compositebuild object to the build function.
 
 ```python
 # Create a new composite build object.
@@ -149,29 +158,17 @@ compositebuild = ts.compositebuild(data={
   owner: lucille['id'],
 })
 
-# Trigger the composite build.
+# Trigger the composite build (will require user confirmation).
 ts.build(compositebuild)
 ```
 
-### Train a Classifier
+## Train and run classifiers
 
-```python
-# Get a classifier.
-classifier = ts.classifier(search='Landcover')[0]
-# Trigger training of the classifier.
-ts.train(classifier)
-```
+To run a classifier, first some training data has to be ingested and assigned
+to a classifier object. With the training data, the classifier can be trained
+and then applied to a predicted layer object. These steps are outlined below.
 
-### Predict a layer
-
-```python
-# Get a predicted layer (contains info about area and classifier to use).
-predictedlayer = ts.predictedlayer()[0]
-# Trigger prediction of the layer.
-ts.predict(predictedlayer)
-```
-
-## Ingest training data
+### Ingest training data
 
 Training data polygons can be ingested using an utility function. The training
 data needs to be provided as a polygon shapefile layer. The function has the
@@ -203,6 +200,24 @@ class_column = 'high_or_low'
 valuemap = {'high': 1, 'low': 2}
 # Upload training samples.
 response = self.ts.ingest(classifier, scene, shp_path, 'name', valuemap)
+```
+
+### Train a Classifier
+
+```python
+# Get a classifier.
+classifier = ts.classifier(search='Landcover')[0]
+# Trigger training of the classifier.
+ts.train(classifier)
+```
+
+### Predict a layer
+
+```python
+# Get a predicted layer (contains info about area and classifier to use).
+predictedlayer = ts.predictedlayer()[0]
+# Trigger prediction of the layer.
+ts.predict(predictedlayer)
 ```
 
 ## Export data
