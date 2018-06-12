@@ -1,6 +1,10 @@
 Tesselate Release Notes
 =======================
 
+0.2.3
+-----
+- Fixed nodata bug on RGB exports.
+
 0.2.2
 -----
 - Fixed zoomlevel bug on export, zoomlevel specification was not working.

@@ -101,9 +101,9 @@ def _create_target_raster(bbox, file_path, zoom, rgb=False):
     # Construct bands.
     if rgb:
         bands = [
-            {'data': [0], 'size': (1, 1), 'nodata_value': 0},
-            {'data': [0], 'size': (1, 1), 'nodata_value': 0},
-            {'data': [0], 'size': (1, 1), 'nodata_value': 0},
+            {'data': [0], 'size': (1, 1), 'nodata_value': None},
+            {'data': [0], 'size': (1, 1), 'nodata_value': None},
+            {'data': [0], 'size': (1, 1), 'nodata_value': None},
         ]
         dtype = 1
         compress = 'deflate'
