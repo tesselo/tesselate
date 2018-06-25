@@ -47,7 +47,8 @@ A few exceptions to the general rule are:
   | compositebuild | [/api/compositebuild](https://tesselo.com/api/compositebuild)| Composite build objects to track builds |
   | scene | [/api/sentineltile](https://tesselo.com/api/sentineltile)| Individual sentinel scenes |
   | formula | [/api/formula](https://tesselo.com/api/formula)| Formulas for algebra rendering and aggregation |
-  | trainingsample | [/api/trainingsample](https://tesselo.com/api/trainingsample)| Training sample polygon |
+  | trainingsample | [/api/trainingsample](https://tesselo.com/api/trainingsample)| A single training sample polygon |
+  | traininglayer | [/api/traininglayer](https://tesselo.com/api/traininglayer)| A group of training sample polygons |
   | classifier | [/api/classifier](https://tesselo.com/api/classifier)| Classifier to train against trainingsamples |
   | predictedlayer | [/api/predictedlayer](https://tesselo.com/api/predictedlayer)| A layer to predict on with classifier |
 
@@ -145,6 +146,15 @@ The following will delete the formula with the primary key 23
 ts.formula(pk=23, delete=True)
 ```
 
+The delete method will ask for user confirmation by default. To force deletion
+without user input (for use in scripts for instance), pass `force=True` to the
+function. The following example will delete the object with primary key 23
+without asking for user confirmation
+
+```python
+ts.formula(pk=23, delete=True, force=True)
+```
+
 ## Retrieve users and groups permissions
 
 A list of user and group permissions can be retrieved using
@@ -227,8 +237,7 @@ Training data polygons can be ingested using an utility function. The training
 data needs to be provided as a polygon shapefile layer. The function has the
 following required arguments:
 
-- *classifier*: The training data will be attached to a classifier that can use
-  the data for training.
+- *traininglayer*: The training layer to which to add the training samples.
 - *image*: The training data is assumed to be "drawn" over a scene or a composite.
   So either a scene or a composite is required.
 - *shapefile*: An absoulte path to a shapefile.
@@ -238,12 +247,16 @@ following required arguments:
   values as integers. If integers are found in the class_column, the dict will
   be used to extract class names and vice versa.
 
-The function can be called as follows. A user confirmation will be requested
-before writing any data.
+There is one optional argument to reset the current set of training samples. If
+`reset=True` is passed as an argument, all current training samples in the layer
+will be permanently deleted.
+
+The ingest function can be called as follows. A user confirmation will be
+requested before deleting or writing data.
 
 ```python
-# Get a classifier.
-classifier = ts.classifier(search='Landcover')[0]
+# Get a training layer.
+traininglayer = ts.traininglayer(search='Landcover')[0]
 # Get the composite over which the training was "drawn". This could also be a
 # scene, both are accepted.
 composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31')[0]
@@ -251,15 +264,23 @@ composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31')[0]
 shp_path = '/path/to/shapefile.shp'
 class_column = 'high_or_low'
 valuemap = {'high': 1, 'low': 2}
-# Upload training samples.
-response = ts.ingest(classifier, scene, shp_path, 'name', valuemap)
+# Upload training samples, deleting the current set of training samples.
+response = ts.ingest(traininglayer, scene, shp_path, 'name', valuemap, reset=True)
 ```
 
 ### Train a Classifier
 
+To train a classifier, a training layer has to be assigned to it. This can
+happen upon creation, or the training layer can be assigned or updated  classifier after
+creation
+
 ```python
 # Get a classifier.
 classifier = ts.classifier(search='Landcover')[0]
+# Assign a training layer to it (optional if the classifier already has an
+# traininglayer assigned to it).
+traininglayer = ts.traininlayer(search='Landcover training data')[0]
+ts.classifier(pk=classifier['id'], data={'traininglayer': traininglayer['id']})
 # Trigger training of the classifier.
 ts.train(classifier)
 ```

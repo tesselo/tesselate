@@ -3,7 +3,7 @@ from django.contrib.gis.gdal import DataSource
 from tesselate.utils import confirm
 
 
-def ingest(ts, classifier, image, shapefile, class_column, valuemap):
+def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, reset):
     """
     Upload trainingsamples from a shapefile.
 
@@ -13,6 +13,12 @@ def ingest(ts, classifier, image, shapefile, class_column, valuemap):
 
     The image is either a sentineltile or a composite.
     """
+    # Delete current training samples.
+    if reset and confirm('delete all {} exsiting training sample in this layer.'.format(len(traininglayer['trainingsamples']))):
+        for sample_id in traininglayer['trainingsamples']:
+            ts.trainingsample(pk=sample_id, delete=True, force=True)
+        traininglayer['trainingsamples'] = []
+
     # Decide if layer input is a scene or a composite.
     if 'interval' in image:
         image_key = 'composite'
@@ -38,6 +44,7 @@ def ingest(ts, classifier, image, shapefile, class_column, valuemap):
             category = list(valuemap.keys())[list(valuemap.values()).index(category_value)]
 
         trainings.append({
+            'traininglayer': traininglayer['id'],
             'category': category,
             'value': category_value,
             'geom': feat.geom.ewkt,
@@ -45,17 +52,14 @@ def ingest(ts, classifier, image, shapefile, class_column, valuemap):
         })
 
     # Ask for confirmation before posting the data.
-    if not confirm('create {} new training samples for classifier {}.'.format(len(trainings), classifier['id'])):
+    if not confirm('create {} new training samples for traininglayer {}.'.format(len(trainings), traininglayer['id'])):
         return
 
     # Post training data.
-    training_ids = []
     for training in trainings:
         response = ts.trainingsample(data=training)
-        training_ids.append(response['id'])
+        # Add new training sample to local traininglayer object to keep it in
+        # sync with the database.
+        traininglayer['trainingsamples'].append(response['id'])
 
-    # Bind the training data to the classifier.
-    classifier.update({'trainingsamples': training_ids})
-    ts.classifier(data=classifier)
-
-    return classifier
+    return traininglayer

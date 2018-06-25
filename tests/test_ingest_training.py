@@ -18,18 +18,13 @@ def mock_create_trainingsample(session, url, json):
     return MockResponse()
 
 
-def mock_update_classifier(session, url, json):
+def mock_delete(session, url):
 
-    class MockResponse(TesselateMockResponseBase):
-
-        def json(self):
-            return json
-
-    return MockResponse()
+    return TesselateMockResponseBase()
 
 
 @mock.patch('tesselate.client.requests.Session.post', mock_create_trainingsample)
-@mock.patch('tesselate.client.requests.Session.patch', mock_update_classifier)
+@mock.patch('tesselate.client.requests.Session.delete', mock_delete)
 @mock.patch('builtins.input', lambda: 'yes')
 @mock.patch('sys.stdout.write', lambda x: None)
 class TestTesselateTriggers(unittest.TestCase):
@@ -40,7 +35,7 @@ class TestTesselateTriggers(unittest.TestCase):
 
     def test_ingestion(self):
         # classifier, scene, shapefile, class_column, valuemap
-        classifier = {'id': 1}
+        traininglayer = {'id': 1, 'name': 'Test training layer', 'trainingsamples': [1, 2, 3]}
         scene = {'id': 2}
         class_column = 'class'
         valuemap = {
@@ -50,10 +45,13 @@ class TestTesselateTriggers(unittest.TestCase):
             'bamboo': 4,
         }
 
-        response = self.ts.ingest(classifier, scene, self.shapefile, class_column, valuemap)
+        response = self.ts.ingest(traininglayer, scene, self.shapefile, class_column, valuemap, reset=False)
+        self.assertEqual(len(response['trainingsamples']), 23)
+
+        response = self.ts.ingest(traininglayer, scene, self.shapefile, class_column, valuemap, reset=True)
         self.assertEqual(len(response['trainingsamples']), 20)
 
         # The interval key identifies this object as composite.
         composite = {'id': 3, 'interval': 'Monthly'}
-        response = self.ts.ingest(classifier, composite, self.shapefile, class_column, valuemap)
+        response = self.ts.ingest(traininglayer, composite, self.shapefile, class_column, valuemap, reset=True)
         self.assertEqual(len(response['trainingsamples']), 20)

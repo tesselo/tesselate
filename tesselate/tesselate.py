@@ -51,6 +51,9 @@ class Tesselate(object):
     def trainingsample(self, pk=None, **filters):
         return self.client.dispatch('trainingsample', pk=pk, **filters)
 
+    def traininglayer(self, pk=None, **filters):
+        return self.client.dispatch('traininglayer', pk=pk, **filters)
+
     def classifier(self, pk=None, **filters):
         return self.client.dispatch('classifier', pk=pk, **filters)
 
@@ -78,5 +81,5 @@ class Tesselate(object):
     def z_scores_grouping(self, mean, std):
         return z_scores_grouping(mean, std)
 
-    def ingest(self, classifier, scene, shapefile, class_column, valuemap):
-        return ingest(self, classifier, scene, shapefile, class_column, valuemap)
+    def ingest(self, classifier, scene, shapefile, class_column, valuemap, reset=False):
+        return ingest(self, classifier, scene, shapefile, class_column, valuemap, reset)

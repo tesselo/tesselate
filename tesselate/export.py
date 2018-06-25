@@ -106,11 +106,16 @@ def _create_target_raster(bbox, file_path, zoom, rgb=False):
             {'data': [0], 'size': (1, 1), 'nodata_value': None},
         ]
         dtype = 1
-        compress = 'deflate'
+        papsz_options = {
+            'compress': 'deflate',
+            'bigtiff': 'yes',
+        }
     else:
         bands = [{'data': [0], 'size': (1, 1), 'nodata_value': 0}]
         dtype = const.RASTER_DATATYPE_GDAL
-        compress = 'deflate'
+        papsz_options = {
+            'compress': 'deflate',
+        }
 
     return GDALRaster({
         'name': file_path,
@@ -122,9 +127,7 @@ def _create_target_raster(bbox, file_path, zoom, rgb=False):
         'srid': WEB_MERCATOR_SRID,
         'scale': (scale, -scale),
         'bands': bands,
-        'papsz_options': {
-            'compress': compress,
-        }
+        'papsz_options': papsz_options,
     })
 
 

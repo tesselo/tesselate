@@ -1,9 +1,18 @@
 Tesselate Release Notes
 =======================
 
-0.2.3
+0.3
 -----
+Breaking change: the data model for training samples has changed. Training
+samples are no longer assigned to a classifier directly. Instead, they are
+assigned to a *training layer* and then the layer as a whole is assigned to the
+classifier. This improves training data management. It also prevents having
+"free floating" training samples that are not associated to anything.
+
+Other changes:
+
 - Fixed nodata bug on RGB exports.
+- Added option to force object deletion without user confirmation.
 
 0.2.2
 -----

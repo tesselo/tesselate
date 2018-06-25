@@ -93,13 +93,13 @@ class Client(object):
 
         return response.json()
 
-    def delete(self, url):
+    def delete(self, url, force=False):
         # Add api root if its not part of the url.
         if not url.startswith(self.api):
             url = self.api + url
 
         # Ask for user confirmation.
-        if not confirm('delete the object at {}'.format(url)):
+        if not force and not confirm('delete the object at {}'.format(url)):
             return
 
         # Get response.
@@ -131,7 +131,8 @@ class Client(object):
 
             # Handle delete case.
             if kwargs.pop('delete', False):
-                return self.delete(endpoint)
+                force = kwargs.pop('force', False)
+                return self.delete(endpoint, force=force)
 
         # Check if user or group list was requested.
         users = kwargs.pop('users', None)
