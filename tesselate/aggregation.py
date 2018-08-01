@@ -26,8 +26,6 @@ def aggregate(client, area, composite, formula, grouping='continuous'):
     # contained in the url query parameters.
     get_params = copy.deepcopy(post_params)
     get_params['layer_names'] = json.dumps(layer_names)
-    # Add synchronous flag to dict.
-    post_params['synchronous'] = True
     # Try to get result from cache.
     result = client.dispatch('valuecountresult', **get_params)
     if len(result):
@@ -35,7 +33,7 @@ def aggregate(client, area, composite, formula, grouping='continuous'):
     else:
         # If valuecount has not been precomputed, do it now synchronously.
         logging.info('Value count not precomputed, requesting synchronous calculation.')
-        return client.post('valuecountresult', data=post_params)
+        return client.post('valuecountresult?synchronous=True', data=post_params)
 
 
 def regional_aggregate(valuecounts):
