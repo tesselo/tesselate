@@ -323,6 +323,10 @@ ts.export(region, composite, formula, target, zoom)
 The aggregation api can be called by passing a composite or scene, a formula and
 an aggregation area to the aggregation function.
 
+Two optional arguments are available: `grouping`, which determines the grouping
+parameter, and `zoom` which determines the zoom level at which the aggregation
+shall be computed.
+
 Note that if the aggregation values have not been already precomputed, the
 computation is requested asynchronously. In that case, the aggregation has to
 be requested a second time a few seconds after the initial request.

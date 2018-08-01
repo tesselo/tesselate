@@ -5,7 +5,7 @@ import logging
 from tesselate.utils import layers_dict
 
 
-def aggregate(client, area, composite, formula, grouping='continuous'):
+def aggregate(client, area, composite, formula, grouping='continuous', zoom=None):
     """
     Request aggregation data.
     """
@@ -22,6 +22,9 @@ def aggregate(client, area, composite, formula, grouping='continuous'):
         'grouping': grouping,
         'acres': 'True',
     }
+    # Add manual zoom level override if provided.
+    if zoom is not None:
+        post_params['zoom'] = zoom
     # Create GET version of query parameters. The layer names dict needs to be
     # contained in the url query parameters.
     get_params = copy.deepcopy(post_params)
