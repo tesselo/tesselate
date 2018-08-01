@@ -19,13 +19,20 @@ class Client(object):
             token = os.environ.get('TESSELO_ACCESS_TOKEN')
             self.set_token(token)
 
+    def raise_for_status(self, response):
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError:
+            logging.error(response.text)
+            raise
+
     def authenticate(self, username, password):
         """
         Authinticate a user by getting a fresh auth token.
         """
         response = requests.post(self.api + 'token-auth/', data={'username': username, 'password': password})
 
-        response.raise_for_status()
+        self.raise_for_status(response)
 
         response = response.json()
 
@@ -60,7 +67,7 @@ class Client(object):
         response = self.session.get(url)
 
         # Check for errors in response.
-        response.raise_for_status()
+        self.raise_for_status(response)
 
         if json_response:
             return response.json()
@@ -76,7 +83,7 @@ class Client(object):
         response = self.session.post(url, json=data)
 
         # Check for errors in response.
-        response.raise_for_status()
+        self.raise_for_status(response)
 
         return response.json()
 
@@ -89,7 +96,7 @@ class Client(object):
         response = self.session.patch(url, json=data)
 
         # Check for errors in response.
-        response.raise_for_status()
+        self.raise_for_status(response)
 
         return response.json()
 
@@ -106,7 +113,7 @@ class Client(object):
         response = self.session.delete(url)
 
         # Check for errors in response.
-        response.raise_for_status()
+        self.raise_for_status(response)
 
     def dispatch(self, endpoint, **kwargs):
         """
