@@ -1,6 +1,10 @@
 Tesselate Release Notes
 =======================
 
+0.3.2
+-----
+- Slightly improved api error messaging.
+
 0.3.1
 -----
 - Fixed asynchronous mode for aggregation utility.
