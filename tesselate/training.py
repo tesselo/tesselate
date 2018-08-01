@@ -32,7 +32,7 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, reset):
     trainings = []
     # Get training data from layer.
     for feat in lyr:
-        category = feat['class'].as_string()
+        category = feat[class_column].as_string()
 
         if category in valuemap:
             # If the column value is a class name, retrieve the corresponding
