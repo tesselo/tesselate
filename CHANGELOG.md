@@ -1,8 +1,12 @@
 Tesselate Release Notes
 =======================
 
-0.3
+0.3.1
 -----
+- Fixed asynchronous mode for aggregation utility.
+
+0.3
+---
 Breaking change: the data model for training samples has changed. Training
 samples are no longer assigned to a classifier directly. Instead, they are
 assigned to a *training layer* and then the layer as a whole is assigned to the
