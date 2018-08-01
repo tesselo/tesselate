@@ -1,5 +1,8 @@
 Tesselate Release Notes
 =======================
+0.3.3
+-----
+- Allowed to specify zoom level for aggregation.
 
 0.3.2
 -----
