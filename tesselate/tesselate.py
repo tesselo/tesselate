@@ -63,8 +63,8 @@ class Tesselate(object):
     def export(self, region, composite, formula, file_path, tilez=14):
         export(self.client, region, composite, formula, file_path, tilez=tilez)
 
-    def aggregate(self, area, composite, formula, grouping='continuous'):
-        return aggregate(self.client, area, composite, formula, grouping)
+    def aggregate(self, area, composite, formula, grouping='continuous', zoom=None):
+        return aggregate(self.client, area, composite, formula, grouping, zoom)
 
     def build(self, compositebuild):
         return build(self.client, compositebuild)
