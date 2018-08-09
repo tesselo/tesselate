@@ -17,9 +17,9 @@ def mock_get_formula_list(session, url):
 
         def json(self):
             return {
-                'count': 12,
-                'next': 'https://tesselo.com/api/formula.json?page=2',
-                'previous': None,
+                'count': 1232,
+                'next': 'https://tesselo.com/api/formula.json?page=5',
+                'previous': 'https://tesselo.com/api/formula.json?page=3',
                 'results': [
                     {'id': 36, 'name': 'Chlorophyll Index', 'acronym': 'CI', 'description': 'Chlorophyll Index', 'formula': 'B7 / B5', 'min_val': 6.0, 'max_val': 0.0, 'breaks': 5, 'color_palette': 'RdYlGn'},
                     {'id': 4, 'name': 'Enhanced Vegetation Index', 'acronym': 'EVI2', 'description': 'In areas of dense canopy where the leaf area index (LAI) is high, the NDVI values can be improved by leveraging information in the blue wavelength. Information in this portion of the spectrum can help correct for soil background signals and atmospheric influences.', 'formula': '(2.5*(B8 - B4) / (B8 + 6*B4 - 7.5*B2 + 1)) * (B3 < 1000)', 'min_val': 0.0, 'max_val': 10.0, 'breaks': 5, 'color_palette': 'Spectral'},

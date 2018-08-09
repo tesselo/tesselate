@@ -1,5 +1,10 @@
 Tesselate Release Notes
 =======================
+
+0.3.4
+-----
+- Improved warning for paginated queries.
+
 0.3.3
 -----
 - Allowed to specify zoom level for aggregation.

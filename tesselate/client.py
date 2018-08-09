@@ -197,8 +197,31 @@ class Client(object):
             response = self.get(endpoint, json_response=json_response)
 
         if json_response:
-            if isinstance(response, dict) and response.get('next', None):
-                logging.warning('Your query has {} results, only the first {} retrieved.'.format(response['count'], len(response['results'])))
+            if isinstance(response, dict):
+                # Determine current page number.
+                if response.get('next', None):
+                    page = int(response['next'].split('page=')[1]) - 1
+                    # Compute number of pages.
+                    page_size = len(response['results'])
+                    page_count = int(response['count'] / page_size) + 1
+                elif response.get('previous', None):
+                    page = response['previous'].split('page=')
+
+                    if len(page) == 2:
+                        page = int(page[1]) + 1
+                    else:
+                        page = 2
+                    # This is the last page.
+                    page_count = page
+                else:
+                    page = None
+                # In pagination case, print warning.
+                if page is not None:
+                    logging.warning('Your query is paginated. Retrieved page {page} out of {page_count} ({total} results total).'.format(
+                        total=response['count'],
+                        page=page,
+                        page_count=page_count,
+                    ))
 
             # Reduce response to data list.
             if 'results' in response:
