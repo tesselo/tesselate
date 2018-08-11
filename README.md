@@ -39,8 +39,8 @@ A few exceptions to the general rule are:
 
   | Function        | Endpoint | Description |
   | --------------- | -------- | ----------- |
-  | group | [/api/groups](https://tesselo.com/api/group) | Lists of groups, read-only |
-  | user | [/api/groups](https://tesselo.com/api/user) | List of users, read-only |
+  | group | [/api/group](https://tesselo.com/api/group) | Lists of groups, read-only |
+  | user | [/api/user](https://tesselo.com/api/user) | List of users, read-only |
   | region | [/api/aggregationlayer](https://tesselo.com/api/aggregationlayer) | Aggregationlayers serve as regions |
   | area | [/api/aggregationarea](https://tesselo.com/api/aggregationarea) | Individual aggregation areas |
   | composite | [/api/composite](https://tesselo.com/api/composite)| Composite layers |
