@@ -5,7 +5,7 @@ def train(client, classifier):
     """
     Train a classifier.
     """
-    msg = 'train the classifier "{}" with pk {}'.format(
+    msg = 'train the classifier "{}" with id {}'.format(
         classifier['name'],
         classifier['id'],
     )
@@ -19,7 +19,7 @@ def predict(client, predictedlayer):
     """
     Predict a layer.
     """
-    if not confirm('predict the Predicted Layer pk {}'.format(predictedlayer['id'])):
+    if not confirm('predict the Predicted Layer id {}'.format(predictedlayer['id'])):
         return
 
     return client.post('predictedlayer/{}/predict'.format(predictedlayer['id']))
@@ -29,7 +29,7 @@ def build(client, compositebuild):
     """
     Build a composite.
     """
-    if not confirm('build the CopositeBuild with pk {}'.format(compositebuild['id'])):
+    if not confirm('build the CopositeBuild with id {}'.format(compositebuild['id'])):
         return
 
     return client.post('compositebuild/{}/build'.format(compositebuild['id']))

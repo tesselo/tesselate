@@ -125,16 +125,16 @@ class Client(object):
         # Get data arg if available.
         data = kwargs.pop('data', {})
 
-        # Get pk using either id or pk keyword.
+        # Get id using either id or id keyword.
         if 'id' in data:
-            pk = data.get('id', None)
+            id = data.get('id', None)
         else:
-            pk = kwargs.pop('pk', None)
+            id = kwargs.pop('id', None)
 
-        # Add pk to endpoint if provided.
-        if pk:
-            # Add pk to endpoint
-            endpoint += '/{}'.format(pk)
+        # Add id to endpoint if provided.
+        if id:
+            # Add id to endpoint
+            endpoint += '/{}'.format(id)
 
             # Handle delete case.
             if kwargs.pop('delete', False):
@@ -189,7 +189,7 @@ class Client(object):
 
         # For requests with data, dispatch post or patch.
         if data:
-            if pk:
+            if id:
                 response = self.patch(endpoint, data)
             else:
                 response = self.post(endpoint, data)

@@ -1,6 +1,12 @@
 Tesselate Release Notes
 =======================
 
+0.4
+---
+Breaking change:
+- Switched all `pk` arguments to `id`. The api expects the `id` keyword, so
+  to stay consistent, the all `pk` arguments were replaced.
+
 0.3.4
 -----
 - Improved warning for paginated queries.

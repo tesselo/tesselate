@@ -25,9 +25,9 @@ browseable api and look at the filter section.
 
 A few exceptions to the general rule are:
 
-- `pk` This keyword is interpreted as the ID or primary key of the objects. It
+- `id` This keyword is interpreted as the ID or primary key of the objects. It
   should be used to get individual objects and to create or update them.
-- `data` This keyword is a dictionary with data for the endpoint. If a `pk`
+- `data` This keyword is a dictionary with data for the endpoint. If a `id`
   argument is provided or if the `data` dictionary contains an `id` key, the
   data is used to update the corresponding object. Otherwise a new one is
   created.
@@ -119,7 +119,7 @@ formula_data = {
      'breaks': 0,
      'color_palette': 'RdYlGn',
 }
-# This will create a new object and return it (including the new pk).
+# This will create a new object and return it (including the new id).
 ts.formula(data=formula_data)
 ```
 
@@ -133,17 +133,17 @@ formula_update = {
     'id': 23,
     'description': 'This index is a proxy for vegetation density.',
 }
-# This will update the description of the formula with pk 23.
+# This will update the description of the formula with id 23.
 ts.formula(data=formula_update)
 ```
 
 ## Delete data
 
-To remove entries entirely, pass the `delete` and `pk` keywords to the endpoint.
+To remove entries entirely, pass the `delete` and `id` keywords to the endpoint.
 The following will delete the formula with the primary key 23
 
 ```python
-ts.formula(pk=23, delete=True)
+ts.formula(id=23, delete=True)
 ```
 
 The delete method will ask for user confirmation by default. To force deletion
@@ -152,7 +152,7 @@ function. The following example will delete the object with primary key 23
 without asking for user confirmation
 
 ```python
-ts.formula(pk=23, delete=True, force=True)
+ts.formula(id=23, delete=True, force=True)
 ```
 
 ## Retrieve users and groups permissions
@@ -161,9 +161,9 @@ A list of user and group permissions can be retrieved using
 
 ```python
 # List user permissions on a formula.
-ts.formula(pk=23, users=True)
+ts.formula(id=23, users=True)
 # List group permissions on a formula.
-ts.formula(pk=23, groups=True)
+ts.formula(id=23, groups=True)
 ```
 
 ## Update permissions
@@ -189,17 +189,17 @@ bluths = ts.group(search='bluth family')[0]
 ndvi = ts.formula(search='NDVI')[0]
 
 # Invite lucille to change the formula.
-ts.formula(pk=ndvi['id'], action='invite', permission='change', invitee=lucille)
+ts.formula(id=ndvi['id'], action='invite', permission='change', invitee=lucille)
 
 # Invite all bluths to view the formula.
-ts.formula(pk=ndvi['id'], action='invite', permission='view', invitee=bluths)
+ts.formula(id=ndvi['id'], action='invite', permission='view', invitee=bluths)
 
 # Make sure the bluths can not delete the formula.
-ts.formula(pk=form['id'], action='exclude', permission='delete', invitee=bluths)
+ts.formula(id=form['id'], action='exclude', permission='delete', invitee=bluths)
 
 # List the users and groups with permissions on the formula (see previous section).
-ts.formula(pk=form['id'], users=True)
-ts.formula(pk=form['id'], groups=True)
+ts.formula(id=form['id'], users=True)
+ts.formula(id=form['id'], groups=True)
 ```
 
 ## Build Composites
@@ -280,7 +280,7 @@ classifier = ts.classifier(search='Landcover')[0]
 # Assign a training layer to it (optional if the classifier already has an
 # traininglayer assigned to it).
 traininglayer = ts.traininlayer(search='Landcover training data')[0]
-ts.classifier(pk=classifier['id'], data={'traininglayer': traininglayer['id']})
+ts.classifier(id=classifier['id'], data={'traininglayer': traininglayer['id']})
 # Trigger training of the classifier.
 ts.train(classifier)
 ```

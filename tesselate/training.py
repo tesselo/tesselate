@@ -16,7 +16,7 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, reset):
     # Delete current training samples.
     if reset and confirm('delete all {} exsiting training sample in this layer.'.format(len(traininglayer['trainingsamples']))):
         for sample_id in traininglayer['trainingsamples']:
-            ts.trainingsample(pk=sample_id, delete=True, force=True)
+            ts.trainingsample(id=sample_id, delete=True, force=True)
         traininglayer['trainingsamples'] = []
 
     # Decide if layer input is a scene or a composite.

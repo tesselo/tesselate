@@ -24,41 +24,41 @@ class Tesselate(object):
         # instantiate the client.
         self.client = Client()
 
-    def user(self, pk=None, **filters):
-        return self.client.dispatch('user', pk=pk, **filters)
+    def user(self, id=None, **filters):
+        return self.client.dispatch('user', id=id, **filters)
 
-    def group(self, pk=None, **filters):
-        return self.client.dispatch('group', pk=pk, **filters)
+    def group(self, id=None, **filters):
+        return self.client.dispatch('group', id=id, **filters)
 
-    def region(self, pk=None, **filters):
-        return self.client.dispatch('aggregationlayer', pk=pk, **filters)
+    def region(self, id=None, **filters):
+        return self.client.dispatch('aggregationlayer', id=id, **filters)
 
-    def area(self, pk=None, **filters):
-        return self.client.dispatch('aggregationarea', pk=pk, **filters)
+    def area(self, id=None, **filters):
+        return self.client.dispatch('aggregationarea', id=id, **filters)
 
-    def composite(self, pk=None, **filters):
-        return self.client.dispatch('composite', pk=pk, **filters)
+    def composite(self, id=None, **filters):
+        return self.client.dispatch('composite', id=id, **filters)
 
-    def compositebuild(self, pk=None, **filters):
-        return self.client.dispatch('compositebuild', pk=pk, **filters)
+    def compositebuild(self, id=None, **filters):
+        return self.client.dispatch('compositebuild', id=id, **filters)
 
-    def scene(self, pk=None, **filters):
-        return self.client.dispatch('sentineltile', pk=pk, **filters)
+    def scene(self, id=None, **filters):
+        return self.client.dispatch('sentineltile', id=id, **filters)
 
-    def formula(self, pk=None, **filters):
-        return self.client.dispatch('formula', pk=pk, **filters)
+    def formula(self, id=None, **filters):
+        return self.client.dispatch('formula', id=id, **filters)
 
-    def trainingsample(self, pk=None, **filters):
-        return self.client.dispatch('trainingsample', pk=pk, **filters)
+    def trainingsample(self, id=None, **filters):
+        return self.client.dispatch('trainingsample', id=id, **filters)
 
-    def traininglayer(self, pk=None, **filters):
-        return self.client.dispatch('traininglayer', pk=pk, **filters)
+    def traininglayer(self, id=None, **filters):
+        return self.client.dispatch('traininglayer', id=id, **filters)
 
-    def classifier(self, pk=None, **filters):
-        return self.client.dispatch('classifier', pk=pk, **filters)
+    def classifier(self, id=None, **filters):
+        return self.client.dispatch('classifier', id=id, **filters)
 
-    def predictedlayer(self, pk=None, **filters):
-        return self.client.dispatch('predictedlayer', pk=pk, **filters)
+    def predictedlayer(self, id=None, **filters):
+        return self.client.dispatch('predictedlayer', id=id, **filters)
 
     def export(self, region, composite, formula, file_path, tilez=14):
         export(self.client, region, composite, formula, file_path, tilez=tilez)
