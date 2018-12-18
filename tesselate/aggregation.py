@@ -5,7 +5,7 @@ import logging
 from tesselate.utils import layers_dict
 
 
-def aggregate(client, area, composite, formula, grouping='continuous', zoom=None):
+def aggregate(client, area, composite, formula, grouping='continuous', zoom=None, synchronous=True):
     """
     Request aggregation data.
     """
@@ -35,8 +35,8 @@ def aggregate(client, area, composite, formula, grouping='continuous', zoom=None
         return result[0]
     else:
         # If valuecount has not been precomputed, do it now synchronously.
-        logging.info('Value count not precomputed, requesting synchronous calculation.')
-        return client.post('valuecountresult?synchronous=True', data=post_params)
+        logging.info('Value count not precomputed, requesting {} calculation.'.format('synchronous' if synchronous else 'asynchronous'))
+        return client.post('valuecountresult{}'.format('?synchronous' if synchronous else ''), data=post_params)
 
 
 def regional_aggregate(valuecounts):
