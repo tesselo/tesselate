@@ -9,18 +9,25 @@ from tesselate import const, tiles
 
 
 def export(client, region, composite, formula, file_path, tilez=14):
-    logging.info('Processing "{}" over "{}" for "{}" at zoom "{}"'.format(
+    logging.info('Processing aggregation{} "{}" over "{}" for "{}" at zoom "{}"'.format(
+        'layer' if 'aggregationareas' in region else 'area',
         formula['name'],
         region['name'],
         composite['name'],
         tilez,
     ))
 
-    # Convert bbox to web mercator.
-    geom = OGRGeometry.from_bbox(region['extent'])
-    geom.srid = 4326
-    geom.transform(WEB_MERCATOR_SRID)
-    extent = geom.extent
+    # Decide if the input is an aggregation area or an aggregation layer.
+    if 'aggregationareas' in region:
+        # Convert bbox to web mercator.
+        geom = OGRGeometry.from_bbox(region['extent'])
+        geom.srid = 4326
+        geom.transform(WEB_MERCATOR_SRID)
+        extent = geom.extent
+    else:
+        geom = OGRGeometry(region['geom'])
+        geom.transform(WEB_MERCATOR_SRID)
+        extent = geom.extent
 
     # Compute target index range.
     index_range = tile_index_range(extent, tilez)

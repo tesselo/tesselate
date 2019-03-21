@@ -302,6 +302,10 @@ created or overwritten by the export function. The zoom level at which to run
 the export can be specified with the optional `tilez` argument. The default zoom
 level is `14`.
 
+The region input can either be an aggregationlayer region, or a single
+aggregationarea polygon from the region. In the case of the aggregationlayer
+input, the extent of the entire layer will be used as export target.
+
 The following example exports NDVI of a march composite over Ethiopia.
 
 ```python
