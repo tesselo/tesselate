@@ -97,7 +97,7 @@ Get a list of composites or scenes as JSON dictionaries as follows
 
 ```python
 # List monthly composites between two dates.
-ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31', interval='Monthly')
+ts.composite(min_date_after='2017-03-01', min_date_before='2018-03-31', interval='Monthly')
 # List scenes for a location between two dates.
 ts.scene(coords='3991669.5,1278364.1', collected_after='2017-11-30', collected_before='2018-12-02')
 ```
@@ -209,7 +209,7 @@ passing the compositebuild object to the build function.
 
 ```python
 # Create a new composite build object.
-composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31', interval='Monthly')[0]
+composite = ts.composite(min_date_after='2017-03-01', min_date_before='2018-03-31', interval='Monthly')[0]
 
 region = ts.region(search='Orange County')
 
@@ -259,7 +259,7 @@ requested before deleting or writing data.
 traininglayer = ts.traininglayer(search='Landcover')[0]
 # Get the composite over which the training was "drawn". This could also be a
 # scene, both are accepted.
-composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31')[0]
+composite = ts.composite(min_date_after='2017-03-01', min_date_before='2018-03-31')[0]
 # Set path, column name and valuemap.
 shp_path = '/path/to/shapefile.shp'
 class_column = 'high_or_low'
@@ -319,7 +319,7 @@ The following example exports NDVI of a march composite over Ethiopia.
 # Get a formula.
 formula = ts.formula(search='NDVI')[0]
 # Get a scene or a composite for export.
-composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31')[0]
+composite = ts.composite(min_date_after='2017-03-01', min_date_before='2018-03-31')[0]
 # Get region over which to export.
 region = ts.region(search='Ethiopia')[0]
 # Specify the local path for the target file.
@@ -355,7 +355,7 @@ aggregation area in a region.
 ```python
 formula = ts.formula(search='NDVI')[0]
 # Get a scene or a composite for export.
-composite = ts.composite(min_date_0='2017-03-01', min_date_1='2018-03-31')[0]
+composite = ts.composite(min_date_after='2017-03-01', min_date_before='2018-03-31')[0]
 # Get region over which to export.
 region = ts.region(search='Ethiopia')[0]
 # Loop through aggregation areas in region.
