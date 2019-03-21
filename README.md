@@ -311,6 +311,8 @@ If the target path is not provided, the function will return a numpy array.
 The export function has an argument `clip_to_geom`, if it is set to `True`, the
 target raster is clipped against the region geometry.
 
+The rasterization mode can be set using the `all_touched` option.
+
 The following example exports NDVI of a march composite over Ethiopia.
 
 ```python
@@ -329,9 +331,10 @@ ts.export(region, composite, formula, target, zoom)
 # Get the data as numpy array.
 target = None
 result = ts.export(region, composite, formula, target, zoom)
-# Clip the raster against the input area geometry.
+# Clip the raster against the input area geometry, where all touched pixels are
+# included in the rasterization.
 clip_to_geom = True
-result = ts.export(region, composite, formula, target, zoom, clip_to_geom)
+result = ts.export(region, composite, formula, target, zoom, clip_to_geom, all_touched=True)
 ```
 
 ## Aggregation

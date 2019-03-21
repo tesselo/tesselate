@@ -12,7 +12,7 @@ from tesselate import const, tiles
 from tesselate.utils import populate_aggregation_areas
 
 
-def export(client, region, composite, formula, file_path=None, zoom=14, clip_to_geom=False):
+def export(client, region, composite, formula, file_path=None, zoom=14, clip_to_geom=False, all_touched=False):
     logging.info('Processing aggregation{} "{}" over "{}" for "{}" at zoom "{}"'.format(
         'layer' if 'aggregationareas' in region else 'area',
         formula['name'],
@@ -62,7 +62,7 @@ def export(client, region, composite, formula, file_path=None, zoom=14, clip_to_
 
     # Clip to geometry.
     if clip_to_geom:
-        _clip_to_geom(client, target, region)
+        _clip_to_geom(client, target, region, all_touched=all_touched)
 
     # Return numpy array if no target file path has been specified.
     if target.name.startswith('/vsimem'):
@@ -172,7 +172,7 @@ def _get_geotransform(bbox, zoom):
     return origin, width, height, scale
 
 
-def _clip_to_geom(client, result, region):
+def _clip_to_geom(client, result, region, all_touched=False):
     if 'aggregationareas' in region:
         # Collect geometries if this is an aggregationlayer.
         populate_aggregation_areas(client, region)
@@ -185,7 +185,7 @@ def _clip_to_geom(client, result, region):
         geom = OGRGeometry(region['geom'])
 
     # Rasterize the resulting geometry.
-    geom_rst = rasterize(geom, result)
+    geom_rst = rasterize(geom, result, all_touched=all_touched)
     geom_mask = geom_rst.bands[0].data() == 0
     # Use geom mask to change target data.
     for band in result.bands:

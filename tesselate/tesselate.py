@@ -60,8 +60,8 @@ class Tesselate(object):
     def predictedlayer(self, id=None, **filters):
         return self.client.dispatch('predictedlayer', id=id, **filters)
 
-    def export(self, region, composite, formula, file_path, zoom=14, clip_to_geom=False):
-        return export(self.client, region, composite, formula, file_path, zoom=zoom, clip_to_geom=clip_to_geom)
+    def export(self, region, composite, formula, file_path, zoom=14, clip_to_geom=False, all_touched=False):
+        return export(self.client, region, composite, formula, file_path, zoom=zoom, clip_to_geom=clip_to_geom, all_touched=all_touched)
 
     def aggregate(self, area, composite, formula, grouping='continuous', zoom=None, synchronous=True):
         return aggregate(self.client, area, composite, formula, grouping, zoom, synchronous)
