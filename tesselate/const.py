@@ -15,3 +15,4 @@ LOOKUP = {
     'B11': 'B11.jp2',
     'B12': 'B12.jp2',
 }
+NODATA_VALUE = 0

@@ -306,6 +306,11 @@ The region input can either be an aggregationlayer region, or a single
 aggregationarea polygon from the region. In the case of the aggregationlayer
 input, the extent of the entire layer will be used as export target.
 
+If the target path is not provided, the function will return a numpy array.
+
+The export function has an argument `clip_to_geom`, if it is set to `True`, the
+target raster is clipped against the region geometry.
+
 The following example exports NDVI of a march composite over Ethiopia.
 
 ```python
@@ -321,6 +326,12 @@ target = '/path/to/newfile.tif'
 zoom = 8
 # Export the data of the formula result evaluated on the composite over the region.
 ts.export(region, composite, formula, target, zoom)
+# Get the data as numpy array.
+target = None
+result = ts.export(region, composite, formula, target, zoom)
+# Clip the raster against the input area geometry.
+clip_to_geom = True
+result = ts.export(region, composite, formula, target, zoom, clip_to_geom)
 ```
 
 ## Aggregation

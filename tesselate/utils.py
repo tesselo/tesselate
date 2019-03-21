@@ -49,3 +49,13 @@ def z_scores_grouping(mean, std):
         {"color": "#a6d96a", "name": "High", "expression": "(x>={0}) & (x<={1})".format(high, very_high)},
         {"color": "#1a9641", "name": "Very High", "expression": "x>{0}".format(very_high)},
     ]
+
+
+def populate_aggregation_areas(client, region):
+    """
+    Request aggregation area objects from api and store them in the region dict.
+    """
+    for index, id in enumerate(region['aggregationareas']):
+        # Only get the data if the area is indeed a primary key integer.
+        if isinstance(id, int):
+            region['aggregationareas'][index] = client.dispatch('aggregationarea', id=id)
