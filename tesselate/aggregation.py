@@ -34,7 +34,7 @@ def aggregate(client, area, composite, formula, grouping='continuous', zoom=None
     if len(result):
         return result[0]
     else:
-        # If valuecount has not been precomputed, do it now synchronously.
+        # If valuecount has not been precomputed, do it now.
         logging.info('Value count not precomputed, requesting {} calculation.'.format('synchronous' if synchronous else 'asynchronous'))
         return client.post('valuecountresult{}'.format('?synchronous' if synchronous else ''), data=post_params)
 

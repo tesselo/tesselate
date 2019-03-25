@@ -341,13 +341,16 @@ result = ts.export(region, composite, formula, target, zoom, clip_to_geom, all_t
 The aggregation api can be called by passing a composite or scene, a formula and
 an aggregation area to the aggregation function.
 
-Two optional arguments are available: `grouping`, which determines the grouping
-parameter, and `zoom` which determines the zoom level at which the aggregation
-shall be computed.
+Three optional arguments are available: `grouping`, which determines the grouping
+parameter, `zoom` which determines the zoom level at which the aggregation
+shall be computed, and `synchronous` which determines if the aggregation is
+requested in synchronous or asynchronous mode. Defaults to `True`.
 
 Note that if the aggregation values have not been already precomputed, the
-computation is requested asynchronously. In that case, the aggregation has to
-be requested a second time a few seconds after the initial request.
+computation is requested. In an asynchronous request, the aggregation value has
+to be requested a second time after the initial request to get the result. The
+status of the object will determine if the aggregation value has been precomputed
+successfully.
 
 The following creates a list of aggregation values with one entry for each
 aggregation area in a region.
