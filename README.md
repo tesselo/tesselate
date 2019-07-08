@@ -51,6 +51,7 @@ A few exceptions to the general rule are:
   | traininglayer | [/api/traininglayer](https://tesselo.com/api/traininglayer)| A group of training sample polygons |
   | classifier | [/api/classifier](https://tesselo.com/api/classifier)| Classifier to train against trainingsamples |
   | predictedlayer | [/api/predictedlayer](https://tesselo.com/api/predictedlayer)| A layer to predict on with classifier |
+  | wmtslayer | [/api/wmtslayer](https://tesselo.com/api/wmtslayer)| Layers that are added to the WMTS endpoint |
 
 ### List of addtional functions
 
@@ -411,6 +412,20 @@ z_aggregates = []
 for area_id in region['aggregationareas']:
     area = ts.area(area_id)
     z_aggregates.append(ts.aggregate(area, composite, ndvi, z_scores))
+```
+
+## WMTS
+With the `wmtslayer` endpoint, one can configure raster layers that will show
+up in the WMTS endpoint of Tesselo.
+
+The endpoint is an endpoint compliant with the [OGC WMTS](https://www.opengeospatial.org/standards/wmts)
+standard. It can be used to include Tesselo data in many different software
+packages, including QGis or ArcGIS.
+
+The url for the WMTS service is the following:
+
+```
+https://tesselo.com/api/wmts/
 ```
 
 ## Logging
