@@ -200,7 +200,7 @@ class Client(object):
             if isinstance(response, dict):
                 # Determine current page number.
                 if response.get('next', None):
-                    page = int(response['next'].split('page=')[1]) - 1
+                    page = int(response['next'].split('page=')[1].split('&')[0]) - 1
                     # Compute number of pages.
                     page_size = len(response['results'])
                     page_count = int(response['count'] / page_size) + 1
@@ -208,11 +208,17 @@ class Client(object):
                     page = response['previous'].split('page=')
 
                     if len(page) == 2:
-                        page = int(page[1]) + 1
+                        page = int(page[1].split('&')[0]) + 1
                     else:
                         page = 2
-                    # This is the last page.
-                    page_count = page
+
+                    if response.get('next', None):
+                        # Compute number of pages.
+                        page_size = len(response['results'])
+                        page_count = int(response['count'] / page_size) + 1
+                    else:
+                        # This is the last page.
+                        page_count = page
                 else:
                     page = None
                 # In pagination case, print warning.
