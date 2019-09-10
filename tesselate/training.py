@@ -9,10 +9,17 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, reset):
 
     The class_column is the shapefile attribute that contains the class of the
     training patch. The valuemap is a dict with class names as keys and class
-    values as integers.
+    values as integers. If the valuemap is empty, continous mode is assumed.
 
     The image is either a sentineltile or a composite.
     """
+    # Check consistency.
+    continuous = traininglayer.get('continuous', False)
+    if valuemap and continuous:
+        raise ValueError('Leave valuemap empty for continuous layers.')
+    elif not valuemap and not continuous:
+        raise ValueError('Provide valuemap for discrete layers.')
+
     # Delete current training samples.
     if reset and confirm('delete all {} exsiting training sample in this layer.'.format(len(traininglayer['trainingsamples']))):
         for sample_id in traininglayer['trainingsamples']:
@@ -32,16 +39,20 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, reset):
     trainings = []
     # Get training data from layer.
     for feat in lyr:
-        category = feat[class_column].as_string()
-
-        if category in valuemap:
-            # If the column value is a class name, retrieve the corresponding
-            # pixel value.
-            category_value = valuemap[category]
+        if continuous:
+            category = ''
+            category_value = float(feat[class_column].as_string())
         else:
-            # If it is an integer, get the class name from the valuemap.
-            category_value = int(category)
-            category = list(valuemap.keys())[list(valuemap.values()).index(category_value)]
+            category = feat[class_column].as_string()
+
+            if category in valuemap:
+                # If the column value is a class name, retrieve the corresponding
+                # pixel value.
+                category_value = valuemap[category]
+            else:
+                # If it is an integer, get the class name from the valuemap.
+                category_value = int(category)
+                category = list(valuemap.keys())[list(valuemap.values()).index(category_value)]
 
         trainings.append({
             'traininglayer': traininglayer['id'],

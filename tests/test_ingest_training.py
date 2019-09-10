@@ -31,11 +31,12 @@ class TestTesselateTriggers(unittest.TestCase):
 
     def setUp(self):
         self.ts = Tesselate()
-        self.shapefile = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/training.shp')
 
-    def test_ingestion(self):
+    def test_ingestion_discrete(self):
+        shapefile = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/training.shp')
+
         # classifier, scene, shapefile, class_column, valuemap
-        traininglayer = {'id': 1, 'name': 'Test training layer', 'trainingsamples': [1, 2, 3]}
+        traininglayer = {'id': 1, 'name': 'Test training layer', 'trainingsamples': [1, 2, 3], 'continuous': False}
         scene = {'id': 2}
         class_column = 'class'
         valuemap = {
@@ -45,13 +46,33 @@ class TestTesselateTriggers(unittest.TestCase):
             'bamboo': 4,
         }
 
-        response = self.ts.ingest(traininglayer, scene, self.shapefile, class_column, valuemap, reset=False)
+        response = self.ts.ingest(traininglayer, scene, shapefile, class_column, valuemap, reset=False)
         self.assertEqual(len(response['trainingsamples']), 23)
 
-        response = self.ts.ingest(traininglayer, scene, self.shapefile, class_column, valuemap, reset=True)
+        response = self.ts.ingest(traininglayer, scene, shapefile, class_column, valuemap, reset=True)
         self.assertEqual(len(response['trainingsamples']), 20)
 
         # The interval key identifies this object as composite.
         composite = {'id': 3, 'interval': 'Monthly'}
-        response = self.ts.ingest(traininglayer, composite, self.shapefile, class_column, valuemap, reset=True)
+        response = self.ts.ingest(traininglayer, composite, shapefile, class_column, valuemap, reset=True)
+        self.assertEqual(len(response['trainingsamples']), 20)
+
+    def test_ingestion_continuous(self):
+        shapefile = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/training_continuous.shp')
+
+        # classifier, scene, shapefile, class_column, valuemap
+        traininglayer = {'id': 1, 'name': 'Test training layer', 'trainingsamples': [1, 2, 3], 'continuous': True}
+        scene = {'id': 2}
+        class_column = 'class'
+        valuemap = None
+
+        response = self.ts.ingest(traininglayer, scene, shapefile, class_column, valuemap, reset=False)
+        self.assertEqual(len(response['trainingsamples']), 23)
+
+        response = self.ts.ingest(traininglayer, scene, shapefile, class_column, valuemap, reset=True)
+        self.assertEqual(len(response['trainingsamples']), 20)
+
+        # The interval key identifies this object as composite.
+        composite = {'id': 3, 'interval': 'Monthly'}
+        response = self.ts.ingest(traininglayer, composite, shapefile, class_column, valuemap, reset=True)
         self.assertEqual(len(response['trainingsamples']), 20)
