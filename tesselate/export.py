@@ -135,6 +135,7 @@ def _create_target_raster(bbox, file_path, zoom, rgb=False):
         dtype = const.RASTER_DATATYPE_GDAL
         papsz_options = {
             'compress': 'deflate',
+            'bigtiff': 'yes',
         }
 
     # Use vsi memory filesystem if no file path was provided.
