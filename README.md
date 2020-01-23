@@ -39,19 +39,19 @@ A few exceptions to the general rule are:
 
   | Function        | Endpoint | Description |
   | --------------- | -------- | ----------- |
-  | group | [/api/group](https://tesselo.com/api/group) | Lists of groups, read-only |
-  | user | [/api/user](https://tesselo.com/api/user) | List of users, read-only |
-  | region | [/api/aggregationlayer](https://tesselo.com/api/aggregationlayer) | Aggregationlayers serve as regions |
-  | area | [/api/aggregationarea](https://tesselo.com/api/aggregationarea) | Individual aggregation areas |
-  | composite | [/api/composite](https://tesselo.com/api/composite)| Composite layers |
-  | compositebuild | [/api/compositebuild](https://tesselo.com/api/compositebuild)| Composite build objects to track builds |
-  | scene | [/api/sentineltile](https://tesselo.com/api/sentineltile)| Individual sentinel scenes |
-  | formula | [/api/formula](https://tesselo.com/api/formula)| Formulas for algebra rendering and aggregation |
-  | trainingsample | [/api/trainingsample](https://tesselo.com/api/trainingsample)| A single training sample polygon |
-  | traininglayer | [/api/traininglayer](https://tesselo.com/api/traininglayer)| A group of training sample polygons |
-  | classifier | [/api/classifier](https://tesselo.com/api/classifier)| Classifier to train against trainingsamples |
-  | predictedlayer | [/api/predictedlayer](https://tesselo.com/api/predictedlayer)| A layer to predict on with classifier |
-  | wmtslayer | [/api/wmtslayer](https://tesselo.com/api/wmtslayer)| Layers that are added to the WMTS endpoint |
+  | group | [/group](https://api.tesselo.com/group) | Lists of groups, read-only |
+  | user | [/user](https://api.tesselo.com/user) | List of users, read-only |
+  | region | [/aggregationlayer](https://api.tesselo.com/aggregationlayer) | Aggregationlayers serve as regions |
+  | area | [/aggregationarea](https://api.tesselo.com/aggregationarea) | Individual aggregation areas |
+  | composite | [/composite](https://api.tesselo.com/composite)| Composite layers |
+  | compositebuild | [/compositebuild](https://api.tesselo.com/compositebuild)| Composite build objects to track builds |
+  | scene | [/sentineltile](https://api.tesselo.com/sentineltile)| Individual sentinel scenes |
+  | formula | [/formula](https://api.tesselo.com/formula)| Formulas for algebra rendering and aggregation |
+  | trainingsample | [/trainingsample](https://api.tesselo.com/trainingsample)| A single training sample polygon |
+  | traininglayer | [/traininglayer](https://api.tesselo.com/traininglayer)| A group of training sample polygons |
+  | classifier | [/classifier](https://api.tesselo.com/classifier)| Classifier to train against trainingsamples |
+  | predictedlayer | [/predictedlayer](https://api.tesselo.com/predictedlayer)| A layer to predict on with classifier |
+  | wmtslayer | [/wmtslayer](https://api.tesselo.com/wmtslayer)| Layers that are added to the WMTS endpoint |
 
 ### List of addtional functions
 
@@ -425,7 +425,7 @@ packages, including QGis or ArcGIS.
 The url for the WMTS service is the following:
 
 ```
-https://tesselo.com/api/wmts/
+https://api.tesselo.com/wmts/
 ```
 
 ## Logging

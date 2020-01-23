@@ -9,7 +9,7 @@ from tesselate.utils import confirm
 
 class Client(object):
 
-    api = 'https://tesselo.com/api/'
+    api = 'https://api.tesselo.com/'
 
     session = None
 

@@ -1,6 +1,15 @@
 Tesselate Release Notes
 =======================
 
+0.5
+---
+Breaking change: Updated api ur to new address.
+
+Other changes:
+- Allowed ingesting continuous training layers.
+- Fixed pagination on paginated results.
+- Added WMTS creation endpoint.
+
 0.4
 ---
 Breaking change:
