@@ -1,6 +1,10 @@
 Tesselate Release Notes
 =======================
 
+0.5.1
+-----
+- Added date column to trainingsample ingestor.
+
 0.5
 ---
 Breaking change: Updated api ur to new address.

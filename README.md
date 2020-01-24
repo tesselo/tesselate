@@ -248,6 +248,10 @@ following required arguments:
   values as integers. If integers are found in the class_column, the dict will
   be used to extract class names and vice versa.
 
+Optinally, a `date_column` input can be specified to ingest training samples
+with a date stamp attached to it. The date column should either be a text column
+with a `YYYY-MM-DD` structure, or a proper date column.
+
 There is one optional argument to reset the current set of training samples. If
 `reset=True` is passed as an argument, all current training samples in the layer
 will be permanently deleted.

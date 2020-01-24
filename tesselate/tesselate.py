@@ -84,5 +84,5 @@ class Tesselate(object):
     def z_scores_grouping(self, mean, std):
         return z_scores_grouping(mean, std)
 
-    def ingest(self, classifier, scene, shapefile, class_column, valuemap, reset=False):
-        return ingest(self, classifier, scene, shapefile, class_column, valuemap, reset)
+    def ingest(self, classifier, scene, shapefile, class_column, valuemap, date_column=None, reset=False):
+        return ingest(self, classifier, scene, shapefile, class_column, valuemap, date_column, reset)

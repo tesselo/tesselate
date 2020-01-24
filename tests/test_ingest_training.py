@@ -76,3 +76,42 @@ class TestTesselateTriggers(unittest.TestCase):
         composite = {'id': 3, 'interval': 'Monthly'}
         response = self.ts.ingest(traininglayer, composite, shapefile, class_column, valuemap, reset=True)
         self.assertEqual(len(response['trainingsamples']), 20)
+
+    def test_ingestion_discrete_with_date(self):
+        shapefile = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/training.shp')
+
+        # classifier, scene, shapefile, class_column, valuemap
+        traininglayer = {'id': 1, 'name': 'Test training layer', 'trainingsamples': [1, 2, 3], 'continuous': False}
+        scene = {'id': 2}
+        class_column = 'class'
+        valuemap = {
+            'burn': 1,
+            'soil': 2,
+            'other': 3,
+            'bamboo': 4,
+        }
+        date_column = 'date'
+        date_string_column = 'date_strin'
+
+        response = self.ts.ingest(traininglayer, scene, shapefile, class_column, valuemap, date_column, reset=True)
+        self.assertEqual(len(response['trainingsamples']), 20)
+
+        response = self.ts.ingest(traininglayer, scene, shapefile, class_column, valuemap, date_string_column, reset=True)
+        self.assertEqual(len(response['trainingsamples']), 20)
+
+    def test_ingestion_wrong_column_names(self):
+        shapefile = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/training_continuous.shp')
+
+        # classifier, scene, shapefile, class_column, valuemap
+        traininglayer = {'id': 1, 'name': 'Test training layer', 'trainingsamples': [1, 2, 3], 'continuous': True}
+        scene = {'id': 2}
+        class_column = 'does not exist'
+        valuemap = None
+        with self.assertRaises(ValueError):
+            self.ts.ingest(traininglayer, scene, shapefile, class_column, valuemap, reset=False)
+
+        class_column = 'class'
+        date_column = 'does not exist'
+
+        with self.assertRaises(ValueError):
+            self.ts.ingest(traininglayer, scene, shapefile, class_column, valuemap, date_column, reset=False)

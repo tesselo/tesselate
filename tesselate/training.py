@@ -3,7 +3,7 @@ from django.contrib.gis.gdal import DataSource
 from tesselate.utils import confirm
 
 
-def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, reset):
+def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, date_column, reset):
     """
     Upload trainingsamples from a shapefile.
 
@@ -35,6 +35,11 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, reset):
     ds = DataSource(shapefile)
     # Get layer from data source.
     lyr = ds[0]
+    # Check if required columns exist.
+    if class_column not in lyr.fields:
+        raise ValueError('Class column "{}" not found in data source.'.format(class_column))
+    if date_column and date_column not in lyr.fields:
+        raise ValueError('Date column "{}" not found in data source.'.format(date_column))
     # Create empty training data list.
     trainings = []
     # Get training data from layer.
@@ -54,11 +59,17 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, reset):
                 category_value = int(category)
                 category = list(valuemap.keys())[list(valuemap.values()).index(category_value)]
 
+        if date_column:
+            date = str(feat[date_column])
+        else:
+            date = ''
+
         trainings.append({
             'traininglayer': traininglayer['id'],
             'category': category,
             'value': category_value,
             'geom': feat.geom.ewkt,
+            'date': date,
             image_key: image['id'],
         })
 
