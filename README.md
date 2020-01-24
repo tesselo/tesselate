@@ -455,3 +455,13 @@ coverage with
 
     coverage run -m unittest discover
     coverage report -m --include=tesselate/*
+
+
+## Releasing
+To release, do the following steps:
+
+- Run tests.
+- Update version in `tesselate/__init__.py` file.
+- Document main changes in CHANGELOG.
+- Push to GitHub.
+- Release on GitHub under new version tag.
