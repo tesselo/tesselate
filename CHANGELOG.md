@@ -1,6 +1,10 @@
 Tesselate Release Notes
 =======================
 
+0.5.2
+-----
+- Updated the export function to use the changed api output (extent not geom).
+
 0.5.1
 -----
 - Added date column to trainingsample ingestor.

@@ -21,17 +21,11 @@ def export(client, region, composite, formula, file_path=None, zoom=14, clip_to_
         zoom,
     ))
 
-    # Decide if the input is an aggregation area or an aggregation layer.
-    if 'aggregationareas' in region:
-        # Convert bbox to web mercator.
-        geom = OGRGeometry.from_bbox(region['extent'])
-        geom.srid = 4326
-        geom.transform(WEB_MERCATOR_SRID)
-        extent = geom.extent
-    else:
-        geom = OGRGeometry(region['geom'])
-        geom.transform(WEB_MERCATOR_SRID)
-        extent = geom.extent
+    # Ensure bbox is a Geom in web mercator.
+    geom = OGRGeometry.from_bbox(region['extent'])
+    geom.srid = 4326
+    geom.transform(WEB_MERCATOR_SRID)
+    extent = geom.extent
 
     # Compute target index range.
     index_range = tile_index_range(extent, zoom)
