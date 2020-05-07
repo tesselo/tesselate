@@ -1,6 +1,13 @@
 Tesselate Release Notes
 =======================
 
+0.6
+---
+Breaking changes:
+- Users and group listing endpoints have been removed.
+- Syntax for updating permissions has changed. User `user` and `group` keywords
+  to pass user and group IDs for permission changes.
+
 0.5.2
 -----
 - Updated the export function to use the changed api output (extent not geom).

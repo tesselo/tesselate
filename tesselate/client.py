@@ -141,22 +141,22 @@ class Client(object):
                 force = kwargs.pop('force', False)
                 return self.delete(endpoint, force=force)
 
-        # Check if user or group list was requested.
-        users = kwargs.pop('users', None)
-        groups = kwargs.pop('groups', None)
+        # Check if this is a persmissions update request.
+        user = kwargs.pop('user', None)
+        group = kwargs.pop('group', None)
 
-        if users and groups:
-            raise ValueError('Users and groups can not be retrieved simultaneously.')
-
-        if users:
-            endpoint += '/users'
-        elif groups:
-            endpoint += '/groups'
+        if user and group:
+            raise ValueError('User and group permissions can not be updated simultaneously.')
+        if user:
+            invitee = user
+            model = 'user'
+        if group:
+            invitee = group
+            model = 'group'
 
         # Check if this an permissions management call.
         permission = kwargs.pop('permission', None)
         action = kwargs.pop('action', None)
-        invitee = kwargs.pop('invitee', None)
 
         if permission and action and invitee:
             if action not in ('invite', 'exclude'):
@@ -165,16 +165,11 @@ class Client(object):
                 raise ValueError('Permission needs to be either "view", "change" or "delete."')
 
             # Construct update url.
-            if 'username' in invitee:
-                model = 'user'
-            else:
-                model = 'group'
-
             permissions_url = '/{action}/{model}/{permission}/{invitee}'.format(
                 action=action,
                 model=model,
                 permission=permission,
-                invitee=invitee['id'],
+                invitee=invitee,
             )
             endpoint += permissions_url
 

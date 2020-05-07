@@ -39,8 +39,6 @@ A few exceptions to the general rule are:
 
   | Function        | Endpoint | Description |
   | --------------- | -------- | ----------- |
-  | group | [/group](https://api.tesselo.com/group) | Lists of groups, read-only |
-  | user | [/user](https://api.tesselo.com/user) | List of users, read-only |
   | region | [/aggregationlayer](https://api.tesselo.com/aggregationlayer) | Aggregationlayers serve as regions |
   | area | [/aggregationarea](https://api.tesselo.com/aggregationarea) | Individual aggregation areas |
   | composite | [/composite](https://api.tesselo.com/composite)| Composite layers |
@@ -156,51 +154,36 @@ without asking for user confirmation
 ts.formula(id=23, delete=True, force=True)
 ```
 
-## Retrieve users and groups permissions
-
-A list of user and group permissions can be retrieved using
-
-```python
-# List user permissions on a formula.
-ts.formula(id=23, users=True)
-# List group permissions on a formula.
-ts.formula(id=23, groups=True)
-```
-
 ## Update permissions
 
 Permissions can be managed by adding three keywords together: `action`,
-`invite`, and `invitee`.
+`invite`, and either `user` or `group`.
 
 * The `action` keyword is either `invite` or `exclude` and controls what action
   to take.
 * The `permission` keyword either `view`, `change`, or `delete` and specifies
   what permission to set.
-* The `invitee` keyword is a user or group dictionary and is the invitee of
-  the permission to change.
+* The `user` or `group` keywords are ID values for a user or a group that
+  represent is the invitee of the permission to change.
 
 The following examples show a few use cases to manage permissions on a formula.
 
 ```python
-# Get one user an one group.
-lucille = ts.user(search='lucille')[0]
-bluths = ts.group(search='bluth family')[0]
-
 # Get a formula.
 ndvi = ts.formula(search='NDVI')[0]
 
+# Assume user and group IDs.
+lucille = 23
+bluths = 5
+
 # Invite lucille to change the formula.
-ts.formula(id=ndvi['id'], action='invite', permission='change', invitee=lucille)
+ts.formula(id=ndvi['id'], action='invite', permission='change', user=lucille)
 
 # Invite all bluths to view the formula.
-ts.formula(id=ndvi['id'], action='invite', permission='view', invitee=bluths)
+ts.formula(id=ndvi['id'], action='invite', permission='view', group=bluths)
 
 # Make sure the bluths can not delete the formula.
-ts.formula(id=form['id'], action='exclude', permission='delete', invitee=bluths)
-
-# List the users and groups with permissions on the formula (see previous section).
-ts.formula(id=form['id'], users=True)
-ts.formula(id=form['id'], groups=True)
+ts.formula(id=form['id'], action='exclude', permission='delete', group=bluths)
 ```
 
 ## Build Composites
@@ -214,12 +197,9 @@ composite = ts.composite(min_date_after='2017-03-01', min_date_before='2018-03-3
 
 region = ts.region(search='Orange County')
 
-lucille = ts.user(search='Lucille')[0]
-
 compositebuild = ts.compositebuild(data={
   composite: composite['id'],
   aggregationlayer: region['id'],
-  owner: lucille['id'],
 })
 
 # Trigger the composite build (will require user confirmation).
