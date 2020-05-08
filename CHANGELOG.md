@@ -7,6 +7,8 @@ Breaking changes:
 - Users and group listing endpoints have been removed.
 - Syntax for updating permissions has changed. User `user` and `group` keywords
   to pass user and group IDs for permission changes.
+- Removed deprecated wmts layer endpoint. The wmts service is now automatically
+  configured using the permissions of a user.
 
 0.5.2
 -----

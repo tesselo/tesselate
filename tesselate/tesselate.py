@@ -54,9 +54,6 @@ class Tesselate(object):
     def predictedlayer(self, id=None, **filters):
         return self.client.dispatch('predictedlayer', id=id, **filters)
 
-    def wmtslayer(self, id=None, **filters):
-        return self.client.dispatch('wmtslayer', id=id, **filters)
-
     def export(self, region, composite, formula, file_path, zoom=14, clip_to_geom=False, all_touched=False):
         return export(self.client, region, composite, formula, file_path, zoom=zoom, clip_to_geom=clip_to_geom, all_touched=all_touched)
 
