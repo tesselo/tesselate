@@ -5,6 +5,7 @@ from django.conf import settings
 from tesselate.aggregation import aggregate, regional_aggregate
 from tesselate.client import Client
 from tesselate.export import export
+from tesselate.tiles import pixel_from_coords
 from tesselate.training import ingest
 from tesselate.triggers import build, predict, train
 from tesselate.utils import z_scores_grouping
@@ -77,3 +78,6 @@ class Tesselate(object):
 
     def ingest(self, classifier, scene, shapefile, class_column, valuemap, date_column=None, reset=False):
         return ingest(self, classifier, scene, shapefile, class_column, valuemap, date_column, reset)
+
+    def pixel_from_coords(self, predictedlayer, coords):
+        return pixel_from_coords(self.client, predictedlayer, coords)

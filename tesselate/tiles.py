@@ -25,3 +25,8 @@ def rgb(client, tilez, tilex, tiley, composite):
         composite['rasterlayer_lookup']['B02.jp2'],
     )
     return client.get(url, json_response=False)
+
+
+def pixel_from_coords(client, predictedlayer, coords):
+    url = 'pixel/{}/{}?formula=x&layers=x={}'.format(coords[0], coords[1], predictedlayer['rasterlayer'])
+    return client.get(url)
