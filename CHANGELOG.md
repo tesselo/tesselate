@@ -1,6 +1,11 @@
 Tesselate Release Notes
 =======================
 
+0.7
+---
+- Added function to obtain pixel value from a coordinate.
+- Imporoved logging on traininglayer ingestion.
+
 0.6
 ---
 Breaking changes:

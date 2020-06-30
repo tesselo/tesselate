@@ -65,6 +65,7 @@ endpoints. These functions are described in more detail below.
 | regional_aggregate | Compute regional aggregates |
 | z_scores_grouping | Helper to create z-scores breaks valuecount dictionary |
 | ingest | Ingest a shapefile as training data |
+| pixel_from_coords | Get pixel value for coordinate |
 
 ## Instantiate Tesselate and authenticate
 
@@ -395,6 +396,19 @@ z_aggregates = []
 for area_id in region['aggregationareas']:
     area = ts.area(area_id)
     z_aggregates.append(ts.aggregate(area, composite, ndvi, z_scores))
+```
+## Get pixel values from predicted layers
+For validation with single coordinate points, pixel values from predicted layers
+can be extracted. The coordinates are expected to be provided in the web
+mercator projection (SRID 3857).
+
+```python
+# Get predictedlayer.
+predictedlayer = ts.predictedlayer(id=23)
+# Set coordinates as tuple.
+coordinates = (1044866, 5851251)
+# Get pixel value at this coordinate for the selected predictedlayer.
+pixel_from_coords(predictedlayer, coordinates)
 ```
 
 ## Logging
