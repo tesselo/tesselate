@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.gis.gdal import DataSource
 
 from tesselate.utils import confirm
@@ -78,10 +80,12 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, date_col
         return
 
     # Post training data.
-    for training in trainings:
+    for index, training in enumerate(trainings):
         response = ts.trainingsample(data=training)
         # Add new training sample to local traininglayer object to keep it in
         # sync with the database.
         traininglayer['trainingsamples'].append(response['id'])
+        if index % 100 == 0:
+            logging.info('Processed {}/{} samples.'.format(index + 1, len(trainings)))
 
     return traininglayer
