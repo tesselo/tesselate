@@ -144,6 +144,7 @@ class Client(object):
         # Check if this is a persmissions update request.
         user = kwargs.pop('user', None)
         group = kwargs.pop('group', None)
+        invitee = None
 
         if user and group:
             raise ValueError('User and group permissions can not be updated simultaneously.')
@@ -157,6 +158,12 @@ class Client(object):
         # Check if this an permissions management call.
         permission = kwargs.pop('permission', None)
         action = kwargs.pop('action', None)
+
+        if permission and not invitee:
+            raise ValueError('Specify either user or group for permissions update.')
+
+        if permission and not action:
+            raise ValueError('Specify an action for permissions update.')
 
         if permission and action and invitee:
             if action not in ('invite', 'exclude'):
