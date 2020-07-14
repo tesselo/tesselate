@@ -46,6 +46,10 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, date_col
     trainings = []
     # Get training data from layer.
     for feat in lyr:
+        # Check feature type.
+        if feat.geom.geom_name != 'POLYGON':
+            raise ValueError('Geometry type must be polygon, found {}.'.format(feat.geom.geom_name))
+
         if continuous:
             category = ''
             category_value = float(feat[class_column].as_string())
