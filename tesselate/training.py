@@ -50,6 +50,10 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, date_col
         if feat.geom.geom_name != 'POLYGON':
             raise ValueError('Geometry type must be polygon, found {}.'.format(feat.geom.geom_name))
 
+        # Collect attributes.
+        attributes = {field: str(feat.get(field)) for field in lyr.fields if field not in [class_column, date_column]}
+
+        # Determine category value from the input class.
         if continuous:
             category = ''
             category_value = float(feat[class_column].as_string())
@@ -77,6 +81,7 @@ def ingest(ts, traininglayer, image, shapefile, class_column, valuemap, date_col
             'geom': feat.geom.ewkt,
             'date': date,
             image_key: image['id'],
+            'attributes': attributes,
         })
 
     # Ask for confirmation before posting the data.
