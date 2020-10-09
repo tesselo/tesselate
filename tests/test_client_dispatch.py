@@ -3,9 +3,9 @@ import os
 import unittest
 
 import mock
-from tests.utils import TesselateMockResponseBase
 
 from tesselate import Tesselate
+from tests.utils import TesselateMockResponseBase
 
 # Reduce log level during tests.
 logging.getLogger().setLevel(logging.ERROR)

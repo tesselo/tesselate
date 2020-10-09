@@ -2,9 +2,9 @@ import os
 import unittest
 
 import mock
-from tests.utils import TesselateMockResponseBase
 
 from tesselate import Tesselate
+from tests.utils import TesselateMockResponseBase
 
 
 def mock_trigger(session, url, json):
